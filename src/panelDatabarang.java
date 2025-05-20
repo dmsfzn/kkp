@@ -38,6 +38,7 @@ public class panelDatabarang extends javax.swing.JPanel {
         jTable1 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
 
+        setOpaque(false);
         setPreferredSize(new java.awt.Dimension(546, 524));
 
         jLabel1.setText("jLabel1");

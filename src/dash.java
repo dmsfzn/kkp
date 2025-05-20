@@ -17,6 +17,7 @@ public class dash extends javax.swing.JFrame {
     public dash() {
         initComponents();
         
+        setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/back.jpeg"));
         backgroundPanel1.setBackgroundImage(icon.getImage());
         
@@ -28,7 +29,7 @@ public class dash extends javax.swing.JFrame {
         keluar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         min.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         full.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
+        
         // Tombol keluar
         keluar.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
@@ -187,6 +188,7 @@ public class dash extends javax.swing.JFrame {
                 .addContainerGap(382, Short.MAX_VALUE))
         );
 
+        panelContent.setOpaque(false);
         panelContent.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout backgroundPanel1Layout = new javax.swing.GroupLayout(backgroundPanel1);
