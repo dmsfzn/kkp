@@ -334,7 +334,7 @@ public class loginKonsumen extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void dashboard() {
-        DASHBOARD sh = new DASHBOARD();
+        dashboard sh = new dashboard();
         sh.setVisible(true);
         this.dispose();
     }

@@ -316,8 +316,8 @@ public class loginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MouseClicked
     
     private void homepage() {
-        homepage dashboard = new homepage();
-        dashboard.setVisible(true);
+        dashboard open = new dashboard();
+        open.setVisible(true);
         
         this.dispose();
     }
