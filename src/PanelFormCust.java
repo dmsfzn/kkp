@@ -21,40 +21,43 @@ public class PanelFormCust extends javax.swing.JPanel {
     }
 
     private void showData() {
-        DefaultTableModel model = (DefaultTableModel) tblSupp.getModel();
-        model.setRowCount(0);
-        String sql = "select * from data.supplier";
-        try {
-            Connection conn = koneksi.getKoneksi();
-            java.sql.Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery(sql);
-            while(rs.next()) {
-                String a = rs.getString("id_pelanggan");
-                String b = rs.getString("nama_perusahaan");
-                String c = rs.getString("nama_pic");
-                String d = rs.getString("jabatan");
-                String e = rs.getString("no_telepon");
-                String f = rs.getString("email");
-                String g = rs.getString("alamat");
-                String h = rs.getString("bidang_proyek");
-                
-                Object[] data =  {a,b,c,d,e,f,g,h};
-                model.addRow(data);
+        DefaultTableModel model = (DefaultTableModel) tblCust.getModel();
+        model.setRowCount(0); // Menghapus semua baris yang ada di tabel
+
+        String sql = "SELECT ID_Pelanggan, Nama_Perusahaan, Nama_PIC, Jabatan, No_Telepon, Email, Alamat, Bidang_Proyek FROM data.Customer";
+
+        try (Connection conn = koneksi.getKoneksi(); // Menggunakan koneksi dari class koneksi.java
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("ID_Pelanggan"),
+                    rs.getString("Nama_Perusahaan"),
+                    rs.getString("Nama_PIC"),
+                    rs.getString("Jabatan"),
+                    rs.getString("No_Telepon"),
+                    rs.getString("Email"),
+                    rs.getString("Alamat"),
+                    rs.getString("Bidang_Proyek")
+                });
             }
-        } catch (Exception ex) {
-            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error memuat data customer: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
     private void kosong() {
-        idPlgn.setText("");
-        namaPerusahaan.setText("");
-        kontakPersonal.setText("");
-        jabatan.setText("");
-        noTelp.setText("");
-        email.setText("");
-        alamat.setText("");
-        bidangPryk.setText("");
+        txtIdPelanggan.setText("");
+        txtNamaPerusahaan.setText("");
+        txtNamaPIC.setText("");
+        txtJabatan.setText("");
+        txtNoTelepon.setText("");
+        txtEmail.setText("");
+        txtAlamat.setText("");
+        txtBidangProyek.setText("");
+        txtIdPelanggan.setEditable(true);
     }
     
     /**
@@ -66,31 +69,31 @@ public class PanelFormCust extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        namaPerusahaan = new javax.swing.JTextField();
+        txtNamaPerusahaan = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        idPlgn = new javax.swing.JTextField();
+        txtIdPelanggan = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jabatan = new javax.swing.JTextField();
-        kontakPersonal = new javax.swing.JTextField();
-        noTelp = new javax.swing.JTextField();
-        email = new javax.swing.JTextField();
-        alamat = new javax.swing.JTextArea();
-        bidangPryk = new javax.swing.JTextField();
+        txtJabatan = new javax.swing.JTextField();
+        txtNamaPIC = new javax.swing.JTextField();
+        txtNoTelepon = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtAlamat = new javax.swing.JTextArea();
+        txtBidangProyek = new javax.swing.JTextField();
         save = new javax.swing.JButton();
         edit = new javax.swing.JButton();
         delete = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblSupp = new javax.swing.JTable();
+        tblCust = new javax.swing.JTable();
 
         setOpaque(false);
 
-        namaPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNamaPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setText("Jabatan");
@@ -110,7 +113,7 @@ public class PanelFormCust extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Bidang Proyek");
 
-        idPlgn.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtIdPelanggan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("No. Telepon");
@@ -118,19 +121,19 @@ public class PanelFormCust extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Email");
 
-        jabatan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtJabatan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        kontakPersonal.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNamaPIC.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        noTelp.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNoTelepon.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        email.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        alamat.setColumns(20);
-        alamat.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        alamat.setRows(5);
-        alamat.setMaximumSize(new java.awt.Dimension(232, 92));
-        alamat.setMinimumSize(new java.awt.Dimension(232, 92));
+        txtAlamat.setColumns(20);
+        txtAlamat.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtAlamat.setRows(5);
+        txtAlamat.setMaximumSize(new java.awt.Dimension(232, 92));
+        txtAlamat.setMinimumSize(new java.awt.Dimension(232, 92));
 
         save.setBackground(new java.awt.Color(152, 124, 12));
         save.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -161,8 +164,8 @@ public class PanelFormCust extends javax.swing.JPanel {
 
         jScrollPane3.setBackground(new java.awt.Color(152, 124, 12));
 
-        tblSupp.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        tblSupp.setModel(new javax.swing.table.DefaultTableModel(
+        tblCust.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblCust.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -173,12 +176,12 @@ public class PanelFormCust extends javax.swing.JPanel {
                 "ID Pelanggan", "Nama Perusaan", "Kontak Personal", "Jabatan", "No Telepon", "Email", "Alamat", "Bidang Proyek"
             }
         ));
-        tblSupp.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblCust.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblSuppMouseClicked(evt);
+                tblCustMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(tblSupp);
+        jScrollPane3.setViewportView(tblCust);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -199,14 +202,14 @@ public class PanelFormCust extends javax.swing.JPanel {
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(noTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNoTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(idPlgn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtIdPelanggan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(namaPerusahaan)
-                                        .addComponent(kontakPersonal, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jabatan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(txtNamaPerusahaan)
+                                        .addComponent(txtNamaPIC, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(txtJabatan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(50, 50, 50)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -214,16 +217,16 @@ public class PanelFormCust extends javax.swing.JPanel {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(bidangPryk, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(alamat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(email))
+                                    .addComponent(txtBidangProyek, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtAlamat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail))
                                 .addContainerGap(32, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104)
+                        .addGap(100, 100, 100)
                         .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(109, 109, 109)
+                        .addGap(100, 100, 100)
                         .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(93, 93, 93))))
         );
@@ -233,7 +236,7 @@ public class PanelFormCust extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(idPlgn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -247,31 +250,31 @@ public class PanelFormCust extends javax.swing.JPanel {
                                 .addGap(34, 34, 34)
                                 .addComponent(jLabel11))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(namaPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNamaPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
-                                .addComponent(kontakPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNamaPIC, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(20, 20, 20)
-                                .addComponent(jabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtJabatan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(noTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNoTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel6))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(44, 44, 44)
                                 .addComponent(jLabel4))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(alamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bidangPryk, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBidangProyek, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -285,98 +288,160 @@ public class PanelFormCust extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "INSERT INTO data.customer (id_pelanggan, nama_perusahaan, nama_pic, jabatan, no_telepon, email, alamat, bidang_proyek) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            //sama dengan variabel di method kosong
-            stmt.setString(1, idPlgn.getText());
-            stmt.setString(2, namaPerusahaan.getText());
-            stmt.setString(3, kontakPersonal.getText());
-            stmt.setString(4, jabatan.getText());
-            stmt.setString(5, noTelp.getText());
-            stmt.setString(6, email.getText());
-            stmt.setString(7, alamat.getText());
-            stmt.setString(8, bidangPryk.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
-            kosong();
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan data!");
+        String idPelanggan = txtIdPelanggan.getText();
+        String namaPerusahaan = txtNamaPerusahaan.getText();
+        String namaPIC = txtNamaPIC.getText();
+        String jabatan = txtJabatan.getText();
+        String noTelepon = txtNoTelepon.getText();
+        String email = txtEmail.getText();
+        String alamat = txtAlamat.getText();
+        String bidangProyek = txtBidangProyek.getText();
+
+        // Validasi input
+        if (idPelanggan.isEmpty() || namaPerusahaan.isEmpty() || namaPIC.isEmpty() || jabatan.isEmpty() || noTelepon.isEmpty() || email.isEmpty() || alamat.isEmpty() || bidangProyek.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String sql = "INSERT INTO data.Customer (ID_Pelanggan, Nama_Perusahaan, Nama_PIC, Jabatan, No_Telepon, Email, Alamat, Bidang_Proyek) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idPelanggan);
+            pstmt.setString(2, namaPerusahaan);
+            pstmt.setString(3, namaPIC);
+            pstmt.setString(4, jabatan);
+            pstmt.setString(5, noTelepon);
+            pstmt.setString(6, email);
+            pstmt.setString(7, alamat);
+            pstmt.setString(8, bidangProyek);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data customer berhasil ditambahkan!");
+                showData(); // Muat ulang data setelah penambahan
+                kosong();   // Bersihkan field input
+            }
+
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("for key 'PRIMARY'")) {
+                JOptionPane.showMessageDialog(this, "ID Pelanggan sudah ada. Gunakan ID lain.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error menambahkan data customer: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+            e.printStackTrace();
         }
     }//GEN-LAST:event_saveActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "UPDATE data.customer SET nama_perusahaan=?, nama_pic=?, jabatan=?, no_telepon=?, email=?, alamat=?, bidang_proyek=? WHERE id_pelanggan=?";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            //variabel samakan dengan method kosong
-            stmt.setString(1, namaPerusahaan.getText());
-            stmt.setString(2, kontakPersonal.getText());
-            stmt.setString(3, jabatan.getText());
-            stmt.setString(4, noTelp.getText());
-            stmt.setString(5, email.getText());
-            stmt.setString(6, alamat.getText());
-            stmt.setString(7, bidangPryk.getText());
-            stmt.setString(8, idPlgn.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil diubah!");
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal mengubah data!");
+       String idPelanggan = txtIdPelanggan.getText();
+        String namaPerusahaan = txtNamaPerusahaan.getText();
+        String namaPIC = txtNamaPIC.getText();
+        String jabatan = txtJabatan.getText();
+        String noTelepon = txtNoTelepon.getText();
+        String email = txtEmail.getText();
+        String alamat = txtAlamat.getText();
+        String bidangProyek = txtBidangProyek.getText();
+
+        if (idPelanggan.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel atau masukkan ID Pelanggan yang akan diedit.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Validasi input: pastikan semua field terisi untuk update
+        if (namaPerusahaan.isEmpty() || namaPIC.isEmpty() || jabatan.isEmpty() || noTelepon.isEmpty() || email.isEmpty() || alamat.isEmpty() || bidangProyek.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi untuk mengedit!", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String sql = "UPDATE data.Customer SET Nama_Perusahaan = ?, Nama_PIC = ?, Jabatan = ?, No_Telepon = ?, Email = ?, Alamat = ?, Bidang_Proyek = ? WHERE ID_Pelanggan = ?";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, namaPerusahaan);
+            pstmt.setString(2, namaPIC);
+            pstmt.setString(3, jabatan);
+            pstmt.setString(4, noTelepon);
+            pstmt.setString(5, email);
+            pstmt.setString(6, alamat);
+            pstmt.setString(7, bidangProyek);
+            pstmt.setString(8, idPelanggan); // WHERE clause
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data customer berhasil diupdate!");
+                showData(); // Muat ulang data setelah update
+                kosong();   // Bersihkan field input
+            } else {
+                JOptionPane.showMessageDialog(this, "ID Pelanggan tidak ditemukan.", "Update Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error mengupdate data customer: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_editActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "DELETE FROM data.customer WHERE id_pelanggan=?";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, idPlgn.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
-            kosong();
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal menghapus data!");
+        String idPelanggan = txtIdPelanggan.getText();
+
+        if (idPelanggan.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel atau masukkan ID Pelanggan yang akan dihapus.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Konfirmasi penghapusan
+        int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus data ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        String sql = "DELETE FROM data.Customer WHERE ID_Pelanggan = ?";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idPelanggan);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data customer berhasil dihapus!");
+                showData(); // Muat ulang data setelah penghapusan
+                kosong();   // Bersihkan field input
+            } else {
+                JOptionPane.showMessageDialog(this, "ID Pelanggan tidak ditemukan.", "Delete Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            // Perhatian: jika ada transaksi yang masih terhubung ke customer ini (foreign key),
+            // maka akan muncul error di sini. Anda bisa menambahkan penanganan error spesifik.
+            if (e.getMessage().contains("Cannot delete or update a parent row: a foreign key constraint fails")) {
+                 JOptionPane.showMessageDialog(this, "Tidak dapat menghapus customer ini karena masih terhubung dengan data Transaksi Customer. Hapus data Transaksi terkait terlebih dahulu.", "Penghapusan Gagal", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error menghapus data customer: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+            e.printStackTrace();
         }
     }//GEN-LAST:event_deleteActionPerformed
 
-    private void tblSuppMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSuppMouseClicked
-        // TODO add your handling code here:
-        int selectedRow = tblSupp.getSelectedRow(); // Ambil baris yang diklik
-
-        // Ambil nilai dari setiap kolom di baris yang dipilih
-        idPlgn.setText(tblSupp.getValueAt(selectedRow, 0).toString());
-        namaPerusahaan.setText(tblSupp.getValueAt(selectedRow, 1).toString());
-        kontakPersonal.setText(tblSupp.getValueAt(selectedRow, 2).toString());
-        jabatan.setText(tblSupp.getValueAt(selectedRow, 3).toString());
-        noTelp.setText(tblSupp.getValueAt(selectedRow, 4).toString());
-        email.setText(tblSupp.getValueAt(selectedRow, 5).toString());
-        alamat.setText(tblSupp.getValueAt(selectedRow, 6).toString());
-        bidangPryk.setText(tblSupp.getValueAt(selectedRow, 6).toString());
-        showData();
-    }//GEN-LAST:event_tblSuppMouseClicked
+    private void tblCustMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustMouseClicked
+       int selectedRow = tblCust.getSelectedRow();
+        if (selectedRow >= 0) {
+            DefaultTableModel model = (DefaultTableModel) tblCust.getModel();
+            txtIdPelanggan.setText(model.getValueAt(selectedRow, 0).toString());
+            txtNamaPerusahaan.setText(model.getValueAt(selectedRow, 1).toString());
+            txtNamaPIC.setText(model.getValueAt(selectedRow, 2).toString());
+            txtJabatan.setText(model.getValueAt(selectedRow, 3).toString());
+            txtNoTelepon.setText(model.getValueAt(selectedRow, 4).toString());
+            txtEmail.setText(model.getValueAt(selectedRow, 5).toString());
+            txtAlamat.setText(model.getValueAt(selectedRow, 6).toString());
+            txtBidangProyek.setText(model.getValueAt(selectedRow, 7).toString());
+            txtIdPelanggan.setEditable(false); // ID Pelanggan tidak bisa diedit saat mode edit
+        }
+    }//GEN-LAST:event_tblCustMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea alamat;
-    private javax.swing.JTextField bidangPryk;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
-    private javax.swing.JTextField email;
-    private javax.swing.JTextField idPlgn;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -386,11 +451,15 @@ public class PanelFormCust extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jabatan;
-    private javax.swing.JTextField kontakPersonal;
-    private javax.swing.JTextField namaPerusahaan;
-    private javax.swing.JTextField noTelp;
     private javax.swing.JButton save;
-    private javax.swing.JTable tblSupp;
+    private javax.swing.JTable tblCust;
+    private javax.swing.JTextArea txtAlamat;
+    private javax.swing.JTextField txtBidangProyek;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIdPelanggan;
+    private javax.swing.JTextField txtJabatan;
+    private javax.swing.JTextField txtNamaPIC;
+    private javax.swing.JTextField txtNamaPerusahaan;
+    private javax.swing.JTextField txtNoTelepon;
     // End of variables declaration//GEN-END:variables
 }

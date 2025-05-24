@@ -23,37 +23,38 @@ public class PanelFormSupp extends javax.swing.JPanel {
     
     private void showData() {
         DefaultTableModel model = (DefaultTableModel) tblSupp.getModel();
-        model.setRowCount(0);
-        String sql = "select * from data.supplier";
-        try {
-            Connection conn = koneksi.getKoneksi();
-            java.sql.Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery(sql);
-            while(rs.next()) {
-                String a = rs.getString("id_supplier");
-                String b = rs.getString("nama_perusahaan");
-                String c = rs.getString("kontak_pic");
-                String d = rs.getString("no_telepon");
-                String e = rs.getString("email");
-                String f = rs.getString("alamat");
-                String g = rs.getString("barang_utama");
-                
-                Object[] data =  {a,b,c,d,e,f,g};
-                model.addRow(data);
+        model.setRowCount(0); // Menghapus semua baris yang ada di tabel
+
+        String sql = "SELECT ID_Supplier, Nama_Perusahaan, Kontak_PIC, No_Telepon, Email, Alamat FROM data.Supplier";
+
+        try (Connection conn = koneksi.getKoneksi(); // Menggunakan koneksi dari class koneksi.java
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("ID_Supplier"),
+                    rs.getString("Nama_Perusahaan"),
+                    rs.getString("Kontak_PIC"),
+                    rs.getString("No_Telepon"),
+                    rs.getString("Email"),
+                    rs.getString("Alamat")
+                });
             }
-        } catch (Exception ex) {
-            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error memuat data supplier: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
     private void kosong() {
-        idSupplier.setText("");
-        namaPerusahaan.setText("");
-        kontakPersonal.setText("");
-        noTelp.setText("");
-        email.setText("");
-        alamat.setText("");
-        barangUtama.setText("");
+        txtIdSupplier.setText("");
+        txtNamaPerusahaan.setText("");
+        txtKontakPIC.setText("");
+        txtNoTelepon.setText("");
+        txtEmail.setText("");
+        txtAlamat.setText("");
+        txtIdSupplier.setEditable(true);
     }
     
     /**
@@ -65,22 +66,19 @@ public class PanelFormSupp extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        idSupplier = new javax.swing.JTextField();
-        namaPerusahaan = new javax.swing.JTextField();
-        kontakPersonal = new javax.swing.JTextField();
-        noTelp = new javax.swing.JTextField();
-        email = new javax.swing.JTextField();
+        txtIdSupplier = new javax.swing.JTextField();
+        txtNamaPerusahaan = new javax.swing.JTextField();
+        txtKontakPIC = new javax.swing.JTextField();
+        txtNoTelepon = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        alamat = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        barangUtama = new javax.swing.JTextArea();
+        txtAlamat = new javax.swing.JTextArea();
         save = new javax.swing.JButton();
         edit = new javax.swing.JButton();
         delete = new javax.swing.JButton();
@@ -89,9 +87,6 @@ public class PanelFormSupp extends javax.swing.JPanel {
 
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(1282, 721));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Barang Utama");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Alamat");
@@ -111,31 +106,22 @@ public class PanelFormSupp extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setText("ID Supplier");
 
-        idSupplier.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtIdSupplier.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        namaPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNamaPerusahaan.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        kontakPersonal.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtKontakPIC.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        noTelp.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNoTelepon.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        email.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
-        alamat.setColumns(20);
-        alamat.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        alamat.setRows(5);
-        alamat.setMaximumSize(new java.awt.Dimension(232, 92));
-        alamat.setMinimumSize(new java.awt.Dimension(232, 92));
-        jScrollPane1.setViewportView(alamat);
-
-        barangUtama.setColumns(20);
-        barangUtama.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        barangUtama.setLineWrap(true);
-        barangUtama.setRows(5);
-        barangUtama.setWrapStyleWord(true);
-        barangUtama.setMaximumSize(new java.awt.Dimension(232, 92));
-        barangUtama.setMinimumSize(new java.awt.Dimension(232, 92));
-        jScrollPane2.setViewportView(barangUtama);
+        txtAlamat.setColumns(20);
+        txtAlamat.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtAlamat.setRows(5);
+        txtAlamat.setMaximumSize(new java.awt.Dimension(232, 92));
+        txtAlamat.setMinimumSize(new java.awt.Dimension(232, 92));
+        jScrollPane1.setViewportView(txtAlamat);
 
         save.setBackground(new java.awt.Color(152, 124, 12));
         save.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -193,179 +179,221 @@ public class PanelFormSupp extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(237, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(idSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(kontakPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(noTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(namaPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtNamaPerusahaan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                            .addComponent(txtIdSupplier, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtKontakPIC))
                         .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 61, Short.MAX_VALUE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(txtEmail)
+                            .addComponent(txtNoTelepon))
+                        .addGap(0, 265, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(131, 131, 131)
+                .addGap(100, 100, 100)
                 .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(100, 100, 100)
                 .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(idSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtIdSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
-                            .addComponent(namaPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(kontakPersonal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtNamaPerusahaan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(noTelp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNoTelepon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addComponent(jLabel2))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtKontakPIC, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "INSERT INTO data.supplier (id_supplier, nama_perusahaan, kontak_pic, no_telepon, email, alamat, barang_utama) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            //sama dengan variabel di method kosong
-            stmt.setString(1, idSupplier.getText());
-            stmt.setString(2, namaPerusahaan.getText());
-            stmt.setString(3, kontakPersonal.getText());
-            stmt.setString(4, noTelp.getText());
-            stmt.setString(5, email.getText());
-            stmt.setString(6, alamat.getText());
-            stmt.setString(7, barangUtama.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
-            kosong();
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan data!");
+        String idSupplier = txtIdSupplier.getText();
+        String namaPerusahaan = txtNamaPerusahaan.getText();
+        String kontakPIC = txtKontakPIC.getText();
+        String noTelepon = txtNoTelepon.getText();
+        String email = txtEmail.getText();
+        String alamat = txtAlamat.getText();
+
+        // Validasi input
+        if (idSupplier.isEmpty() || namaPerusahaan.isEmpty() || kontakPIC.isEmpty() || noTelepon.isEmpty() || email.isEmpty() || alamat.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String sql = "INSERT INTO data.Supplier (ID_Supplier, Nama_Perusahaan, Kontak_PIC, No_Telepon, Email, Alamat) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idSupplier);
+            pstmt.setString(2, namaPerusahaan);
+            pstmt.setString(3, kontakPIC);
+            pstmt.setString(4, noTelepon);
+            pstmt.setString(5, email);
+            pstmt.setString(6, alamat);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data supplier berhasil ditambahkan!");
+                showData(); // Muat ulang data setelah penambahan
+                kosong();   // Bersihkan field input
+            }
+
+        } catch (SQLException e) {
+            if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("for key 'PRIMARY'")) {
+                JOptionPane.showMessageDialog(this, "ID Supplier sudah ada. Gunakan ID lain.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error menambahkan data supplier: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+            e.printStackTrace();
         }
     }//GEN-LAST:event_saveActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "UPDATE data.supplier SET nama_perusahaan=?, kontak_pic=?, no_telepon=?, email=?, alamat=?, barang_utama=? WHERE id_supplier=?";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            //variabel samakan dengan method kosong
-            stmt.setString(1, namaPerusahaan.getText());
-            stmt.setString(2, kontakPersonal.getText());
-            stmt.setString(3, noTelp.getText());
-            stmt.setString(4, email.getText());
-            stmt.setString(5, alamat.getText());
-            stmt.setString(6, barangUtama.getText());
-            stmt.setString(7, idSupplier.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil diubah!");
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal mengubah data!");
+        String idSupplier = txtIdSupplier.getText();
+        String namaPerusahaan = txtNamaPerusahaan.getText();
+        String kontakPIC = txtKontakPIC.getText();
+        String noTelepon = txtNoTelepon.getText();
+        String email = txtEmail.getText();
+        String alamat = txtAlamat.getText();
+
+        if (idSupplier.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel atau masukkan ID Supplier yang akan diedit.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Validasi input: pastikan semua field terisi untuk update
+        if (namaPerusahaan.isEmpty() || kontakPIC.isEmpty() || noTelepon.isEmpty() || email.isEmpty() || alamat.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Semua field harus diisi untuk mengedit!", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String sql = "UPDATE data.Supplier SET Nama_Perusahaan = ?, Kontak_PIC = ?, No_Telepon = ?, Email = ?, Alamat = ? WHERE ID_Supplier = ?";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, namaPerusahaan);
+            pstmt.setString(2, kontakPIC);
+            pstmt.setString(3, noTelepon);
+            pstmt.setString(4, email);
+            pstmt.setString(5, alamat);
+            pstmt.setString(6, idSupplier); // WHERE clause
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data supplier berhasil diupdate!");
+                showData(); // Muat ulang data setelah update
+                kosong();   // Bersihkan field input
+            } else {
+                JOptionPane.showMessageDialog(this, "ID Supplier tidak ditemukan.", "Update Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error mengupdate data supplier: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_editActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        // TODO add your handling code here:
-        try {
-            //sesuaikan dengan nama tabel dan kolom di database
-            String sql = "DELETE FROM data.supplier WHERE id_supplier=?";
-            Connection conn = koneksi.getKoneksi();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, idSupplier.getText());
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
-            kosong();
-            showData();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Gagal menghapus data!");
+        String idSupplier = txtIdSupplier.getText();
+
+        if (idSupplier.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel atau masukkan ID Supplier yang akan dihapus.", "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Konfirmasi penghapusan
+        int confirm = JOptionPane.showConfirmDialog(this, "Anda yakin ingin menghapus data ini?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        String sql = "DELETE FROM ata.Supplier WHERE ID_Supplier = ?";
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idSupplier);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                JOptionPane.showMessageDialog(this, "Data supplier berhasil dihapus!");
+                showData(); // Muat ulang data setelah penghapusan
+                kosong();   // Bersihkan field input
+            } else {
+                JOptionPane.showMessageDialog(this, "ID Supplier tidak ditemukan.", "Delete Error", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (SQLException e) {
+            // Perhatian: jika ada barang yang masih terhubung ke supplier ini (foreign key),
+            // maka akan muncul error di sini. Anda bisa menambahkan penanganan error spesifik.
+            if (e.getMessage().contains("Cannot delete or update a parent row: a foreign key constraint fails")) {
+                 JOptionPane.showMessageDialog(this, "Tidak dapat menghapus supplier ini karena masih terhubung dengan data Barang. Hapus data Barang terkait terlebih dahulu.", "Penghapusan Gagal", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error menghapus data supplier: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+            e.printStackTrace();
         }
     }//GEN-LAST:event_deleteActionPerformed
 
     private void tblSuppMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSuppMouseClicked
-        // TODO add your handling code here:
-        int selectedRow = tblSupp.getSelectedRow(); // Ambil baris yang diklik
-
-        // Ambil nilai dari setiap kolom di baris yang dipilih
-        idSupplier.setText(tblSupp.getValueAt(selectedRow, 0).toString());
-        namaPerusahaan.setText(tblSupp.getValueAt(selectedRow, 1).toString());
-        kontakPersonal.setText(tblSupp.getValueAt(selectedRow, 2).toString());
-        noTelp.setText(tblSupp.getValueAt(selectedRow, 3).toString());
-        email.setText(tblSupp.getValueAt(selectedRow, 4).toString());
-        alamat.setText(tblSupp.getValueAt(selectedRow, 5).toString());
-        barangUtama.setText(tblSupp.getValueAt(selectedRow, 6).toString());
-        showData();
+        int selectedRow = tblSupp.getSelectedRow();
+        if (selectedRow >= 0) {
+            DefaultTableModel model = (DefaultTableModel) tblSupp.getModel();
+            txtIdSupplier.setText(model.getValueAt(selectedRow, 0).toString());
+            txtNamaPerusahaan.setText(model.getValueAt(selectedRow, 1).toString());
+            txtKontakPIC.setText(model.getValueAt(selectedRow, 2).toString());
+            txtNoTelepon.setText(model.getValueAt(selectedRow, 3).toString());
+            txtEmail.setText(model.getValueAt(selectedRow, 4).toString());
+            txtAlamat.setText(model.getValueAt(selectedRow, 5).toString());
+            txtIdSupplier.setEditable(false); // ID Supplier tidak bisa diedit saat mode edit
+        }
     }//GEN-LAST:event_tblSuppMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea alamat;
-    private javax.swing.JTextArea barangUtama;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
-    private javax.swing.JTextField email;
-    private javax.swing.JTextField idSupplier;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -373,12 +401,14 @@ public class PanelFormSupp extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField kontakPersonal;
-    private javax.swing.JTextField namaPerusahaan;
-    private javax.swing.JTextField noTelp;
     private javax.swing.JButton save;
     private javax.swing.JTable tblSupp;
+    private javax.swing.JTextArea txtAlamat;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtIdSupplier;
+    private javax.swing.JTextField txtKontakPIC;
+    private javax.swing.JTextField txtNamaPerusahaan;
+    private javax.swing.JTextField txtNoTelepon;
     // End of variables declaration//GEN-END:variables
 }
