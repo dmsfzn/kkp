@@ -20,3 +20,69 @@ CREATE TABLE detail_penjualan (
     -- Menghubungkan ke tabel barang di database yang sama
     FOREIGN KEY (ID_Barang) REFERENCES barang(ID_Barang)
 );
+
+dummy data langsung copas
+-- ==================================================
+-- 10 DUMMY DATA UNTUK TABEL: supplier
+-- ==================================================
+INSERT INTO `supplier` (`ID_Supplier`, `Nama_Perusahaan`, `Kontak_Personal`, `No_Telepon`, `Email`, `Alamat`) VALUES
+('SUP001', 'PT. Safety First Indonesia', 'Budi Santoso', '081234567001', 'budi.s@safetyfirst.co.id', 'Jl. Industri Raya No. 1, Cikarang'),
+('SUP002', 'CV. Alat Pelindung Sejahtera', 'Siti Aminah', '081234567002', 'siti.a@aps-sejahtera.com', 'Jl. Gatot Subroto No. 12, Bandung'),
+('SUP003', 'Toko Helm Konstruksi', 'Agus Salim', '081234567003', 'agus.salim@helmkonstruksi.com', 'Glodok Jaya Lt. 2, Jakarta Barat'),
+('SUP004', 'Distributor Sepatu Safety', 'Dewi Lestari', '081234567004', 'dewi.l@distro-safety.com', 'Jl. Pahlawan No. 10, Surabaya'),
+('SUP005', 'PT. Garda K3 Nasional', 'Eko Susanto', '081234567005', 'eko.s@gardak3.co.id', 'Jl. MH Thamrin No. 8, Jakarta Pusat'),
+('SUP006', 'CV. Sarung Tangan Ansell', 'Fitriani', '081234567006', 'fitriani@ansell-dist.com', 'Kawasan Industri Medan, Medan'),
+('SUP007', 'UD. Kacamata Pelindung', 'Hadi Wijaya', '081234567007', 'hadi.w@kacamatasafety.net', 'Jl. Ahmad Yani No. 30, Yogyakarta'),
+('SUP008', 'PT. Respirator 3M Jaya', 'Indra Gunawan', '081234567008', 'indra.g@3mjaya.com', 'Jl. Asia Afrika No. 15, Bandung'),
+('SUP009', 'Toko APAR Yamato', 'Joko Purnomo', '081234567009', 'joko.p@yamato-apar.com', 'Jl. Diponegoro No. 5, Semarang'),
+('SUP010', 'CV. Cahaya Safety Sign', 'Lina Marlina', '081234567010', 'lina.m@cahayasign.co.id', 'Jl. Veteran No. 20, Surabaya');
+
+-- ==================================================
+-- 20 DUMMY DATA UNTUK TABEL: customer (TETAP SAMA)
+-- ==================================================
+INSERT INTO `customer` (`ID_Pelanggan`, `Nama_Perusahaan`, `Kontak_Personal`, `Jabatan`, `No_Telepon`, `Email`, `Alamat`, `Bidang_Proyek`) VALUES
+('CUS001', 'PT. Konstruksi Jaya Megah', 'Andi Wijaya', 'Project Manager', '082134567001', 'andi.wijaya@kjm.com', 'Jl. Sudirman Kav. 5, Jakarta', 'Pembangunan Gedung Perkantoran'),
+('CUS002', 'CV. Manufaktur Baja Berat', 'Bambang Irawan', 'Kepala Produksi', '082134567002', 'bambang.i@mbb.co.id', 'Kawasan Industri Jababeka, Cikarang', 'Fabrikasi Rangka Baja'),
+('CUS003', 'PT. Pertambangan Inti Bumi', 'Citra Lestari', 'HSE Officer', '082134567003', 'citra.l@intibumi.com', 'Jl. Tambang Raya No. 3, Kalimantan', 'Operasi Tambang Batubara'),
+('CUS004', 'PT. Waskita Karya (Persero) Tbk', 'Dedi Setiawan', 'Site Manager', '082134567004', 'dedi.s@waskita.co.id', 'Proyek Tol Trans-Sumatera, Lampung', 'Pembangunan Jalan Tol'),
+('CUS005', 'CV. Elektro Instalasi', 'Endah Puspita', 'Supervisor', '082134567005', 'endah.p@elektro.com', 'Jl. Listrik No. 9, Surabaya', 'Instalasi Listrik Pabrik'),
+('CUS006', 'PT. Adhi Karya (Persero) Tbk', 'Fajar Nugroho', 'Safety Inspector', '082134567006', 'fajar.n@adhi.co.id', 'Proyek LRT Jabodebek, Jakarta', 'Konstruksi Jalur Kereta'),
+('CUS007', 'PT. Semen Indonesia (Persero) Tbk', 'Gita Permatasari', 'Manajer K3', '082134567007', 'gita.p@semenindonesia.com', 'Pabrik Semen Gresik, Gresik', 'Operasional Pabrik Semen'),
+('CUS008', 'PT. Pembangunan Perumahan (PP)', 'Hendra Gunawan', 'Koordinator Lapangan', '082134567008', 'hendra.g@ptpp.co.id', 'Proyek Apartemen, Tangerang', 'Pembangunan Apartemen'),
+('CUS009', 'CV. Mitra Teknik', 'Iwan Fals', 'Teknisi Utama', '082134567009', 'iwan.f@mitrateknik.net', 'Jl. Bengkel No. 1, Bekasi', 'Perawatan Mesin Industri'),
+('CUS010', 'PT. Chevron Pacific Indonesia', 'Jasmine Siregar', 'Field Safety Officer', '082134567010', 'jasmine.s@chevron.com', 'Lapangan Minyak Duri, Riau', 'Operasi Pengeboran Minyak'),
+('CUS011', 'PT. Freeport Indonesia', 'Kartika Putri', 'Mine Safety Supervisor', '082134567011', 'kartika.p@fmi.com', 'Grasberg Mine, Papua', 'Operasi Tambang Emas'),
+('CUS012', 'PT. Wijaya Karya (WIKA)', 'Lukman Hakim', 'HSE Manager', '082134567012', 'lukman.h@wika.co.id', 'Proyek Bendungan, Jawa Tengah', 'Pembangunan Bendungan'),
+('CUS013', 'CV. Makmur Sentosa', 'Mega Utami', 'Pemilik', '082134567013', 'mega.u@makmursentosa.com', 'Jl. Raya Bogor Km. 30, Depok', 'Kontraktor Renovasi Rumah'),
+('CUS014', 'PT. PLN (Persero)', 'Nanda Putra', 'Supervisor Jaringan', '082134567014', 'nanda.p@pln.co.id', 'Gardu Induk Cawang, Jakarta', 'Perawatan Jaringan Listrik'),
+('CUS015', 'PT. Krakatau Steel', 'Oscar Maulana', 'Safety Engineer', '082134567015', 'oscar.m@krakatausteel.com', 'Kawasan Industri Cilegon, Banten', 'Pabrik Baja'),
+('CUS016', 'CV. Angkasa Pura', 'Putri Ayu', 'Ground Handling Spv', '082134567016', 'putri.a@angkasapura.id', 'Bandara Soekarno-Hatta, Tangerang', 'Operasional Bandara'),
+('CUS017', 'PT. Hutama Karya', 'Qodir Jaelani', 'Ahli K3 Konstruksi', '082134567017', 'qodir.j@hutamakarya.com', 'Proyek Infrastruktur, Makassar', 'Pembangunan Pelabuhan'),
+('CUS018', 'PT. Petrokimia Gresik', 'Rahmat Hidayat', 'Kepala Keamanan', '082134567018', 'rahmat.h@petrokimia.com', 'Pabrik Pupuk, Gresik', 'Operasional Pabrik Kimia'),
+('CUS019', 'CV. Tirta Buana', 'Siska Amelia', 'Analis Lab', '082134567019', 'siska.a@tirtabuana.net', 'Jl. Air Bersih No. 1, Jakarta', 'Pengolahan Air Limbah'),
+('CUS020', 'PT. Unilever Indonesia Tbk', 'Toni Sucipto', 'Factory Manager', '082134567020', 'toni.s@unilever.com', 'Pabrik Rungkut, Surabaya', 'Produksi Barang Konsumsi');
+
+-- =======================================================================================
+-- 20 DUMMY DATA UNTUK TABEL: barang (DIUBAH UNTUK MERUJUK KE 10 SUPPLIER SAJA)
+-- =======================================================================================
+INSERT INTO `barang` (`ID_Barang`, `Nama_Barang`, `ID_Supplier`, `Harga_Beli`, `Harga_Jual`) VALUES
+('BRG001', 'Helm Proyek MSA V-Gard', 'SUP001', 75000, 110000),
+('BRG002', 'Sepatu Safety Kings KWD807', 'SUP004', 350000, 480000),
+('BRG003', 'Sarung Tangan Anti-Potong Ansell', 'SUP006', 45000, 70000),
+('BRG004', 'Masker Respirator 3M N95 8210', 'SUP008', 15000, 25000),
+('BRG005', 'Kacamata Safety Uvex Skyper', 'SUP007', 85000, 125000),
+('BRG006', 'Rompi Jaring Reflektif', 'SUP002', 25000, 40000),
+('BRG007', 'APAR Yamato Powder 3kg', 'SUP009', 450000, 600000),
+('BRG008', 'Safety Sign "Awas Lantai Licin"', 'SUP010', 30000, 50000),
+('BRG009', 'Full Body Harness Adela', 'SUP005', 650000, 850000),
+('BRG010', 'Earplug 3M 1270', 'SUP008', 8000, 15000),
+('BRG011', 'Traffic Cone 75cm', 'SUP002', 55000, 80000),
+('BRG012', 'Safety Goggles Gosave', 'SUP007', 35000, 55000),
+('BRG013', 'Helm Las Otomatis', 'SUP003', 250000, 375000),
+('BRG014', 'Sarung Tangan Las Kulit', 'SUP006', 60000, 90000),
+('BRG015', 'Masker Debu Sekali Pakai (Box 50pcs)', 'SUP008', 20000, 35000),
+('BRG016', 'Sepatu Safety Cheetah 2286', 'SUP004', 320000, 450000),
+('BRG017', 'Rambu Titik Kumpul', 'SUP010', 150000, 220000),
+('BRG018', 'Police Line / Garis Polisi (Roll)', 'SUP002', 40000, 65000),
+('BRG019', 'Kotak P3K Dinding', 'SUP001', 120000, 180000),
+('BRG020', 'Welding Helmet Blue Eagle', 'SUP003', 180000, 250000);
