@@ -333,8 +333,8 @@ public class loginKonsumen extends javax.swing.JFrame {
         homepage();
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void dashboard() {
-        dashboard sh = new dashboard();
+    private void dashboardCust() {
+        dashboardCust sh = new dashboardCust();
         sh.setVisible(true);
         this.dispose();
     }
@@ -374,9 +374,10 @@ public class loginKonsumen extends javax.swing.JFrame {
             // Execute query
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
+                    int idDariDatabase = rs.getInt("id"); 
                     JOptionPane.showMessageDialog(this, "Login berhasil!");
-                    session.setUsername(username);
-                    dashboard();
+                    session.setUsername(idDariDatabase, username);
+                    dashboardCust();
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Username atau password salah.");

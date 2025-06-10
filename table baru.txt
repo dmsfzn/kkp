@@ -1,0 +1,22 @@
+CREATE TABLE transaksi_penjualan (
+    ID_Transaksi INT PRIMARY KEY AUTO_INCREMENT,
+    ID_Pelanggan INT NOT NULL,
+    Total_Transaksi INT NOT NULL,
+    
+    -- Foreign Key ini menunjuk ke tabel 'konsumen' di database 'user'
+    FOREIGN KEY (ID_Pelanggan) REFERENCES user.konsumen(id)
+);
+
+CREATE TABLE detail_penjualan (
+    ID_Detail INT PRIMARY KEY AUTO_INCREMENT,
+    ID_Transaksi INT NOT NULL,
+    ID_Barang VARCHAR(50) NOT NULL,
+    Jumlah INT NOT NULL,
+    Harga_Saat_Transaksi INT NOT NULL,
+    
+    -- Menghubungkan ke tabel transaksi_penjualan di database yang sama
+    FOREIGN KEY (ID_Transaksi) REFERENCES transaksi_penjualan(ID_Transaksi),
+    
+    -- Menghubungkan ke tabel barang di database yang sama
+    FOREIGN KEY (ID_Barang) REFERENCES barang(ID_Barang)
+);
