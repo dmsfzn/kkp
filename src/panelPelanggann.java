@@ -19,6 +19,7 @@ public class panelPelanggann extends javax.swing.JPanel {
     public panelPelanggann() {
         initComponents();
         keranjangBelanja = new ArrayList<>();
+        greetings.setText("Hello, " + session.getUsername());
         showData();
     }
     
@@ -60,6 +61,7 @@ public class panelPelanggann extends javax.swing.JPanel {
         btnTambah = new javax.swing.JButton();
         btnKeranjang = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
+        greetings = new javax.swing.JLabel();
 
         setOpaque(false);
 
@@ -117,28 +119,34 @@ public class panelPelanggann extends javax.swing.JPanel {
             }
         });
 
+        greetings.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(btnSimpan)
                 .addGap(18, 18, 18)
                 .addComponent(btnTambah)
                 .addGap(18, 18, 18)
                 .addComponent(btnKeranjang)
-                .addGap(39, 39, 39))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(greetings)
+                .addGap(95, 95, 95))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTambah)
-                    .addComponent(btnKeranjang)
-                    .addComponent(btnSimpan))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTambah)
+                        .addComponent(btnKeranjang)
+                        .addComponent(btnSimpan))
+                    .addComponent(greetings))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
         );
@@ -245,7 +253,7 @@ public class panelPelanggann extends javax.swing.JPanel {
     long idTransaksiBaru = -1; // Variabel untuk menyimpan ID Transaksi yang baru
 
     // Siapkan query SQL
-    String sqlHeader = "INSERT INTO data.transaksi_penjualan (ID_Pelanggan, Total_Transaksi) VALUES (?, ?)";
+    String sqlHeader = "INSERT INTO data.transaksi_penjualan (ID_Pelanggan, Total_Transaksi, tanggal_transaksi) VALUES (?, ?, NOW())";
     String sqlDetail = "INSERT INTO data.detail_penjualan (ID_Transaksi, ID_Barang, Jumlah, Harga_Saat_Transaksi) VALUES (?, ?, ?, ?)";
 
     try {
@@ -334,11 +342,12 @@ public class panelPelanggann extends javax.swing.JPanel {
     }
     }//GEN-LAST:event_btnSimpanActionPerformed
 
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnKeranjang;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
+    private javax.swing.JLabel greetings;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblBarang;
     // End of variables declaration//GEN-END:variables

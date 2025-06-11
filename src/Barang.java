@@ -13,6 +13,10 @@ public class Barang {
         this.kuantitas = 1; 
     }
 
+    Barang(String nama, int harga) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     // --- PASTIKAN METHOD INI ADA ---
     public String getIdBarang() {
         return idBarang;

@@ -358,8 +358,7 @@ public class loginFrame extends javax.swing.JFrame {
         
         return valid;
     }
-    
-    /**
+        /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {

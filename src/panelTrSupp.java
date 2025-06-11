@@ -3,99 +3,103 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.io.File;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author asus
  */
 public class panelTrSupp extends javax.swing.JPanel {
-    private ArrayList<Barang> keranjangBelanja;
+    private final ArrayList<Barang> keranjangBelanja;
     /**
      * Creates new form panelPelanggan
      */
     public panelTrSupp() {
         initComponents();
         keranjangBelanja = new ArrayList<>();
-        showData();
     }
     
-   private void showData() {
-    DefaultTableModel model = (DefaultTableModel) tblSupp.getModel();
-    model.setRowCount(0);
+    private void showData(java.util.Date tanggalAwal, java.util.Date tanggalAkhir) {
+        DefaultTableModel model = (DefaultTableModel) tblSupp.getModel();
+        model.setRowCount(0);
 
-    String sql = "SELECT ID_Supplier, Nama_Barang, SUM(Harga_Beli) AS Total " +
-                 "FROM data.barang " +
-                 "GROUP BY ID_Supplier, Nama_Barang WITH ROLLUP";
+        String sql = "SELECT tanggal_pembelian, ID_Supplier, Nama_Barang, Harga_Beli " +
+                     "FROM data.barang " +
+                     "WHERE tanggal_pembelian BETWEEN ? AND ? " +
+                     "ORDER BY tanggal_pembelian ASC";
 
-    // Tahap 1: Siapkan wadah untuk menyimpan data sementara
-    // List untuk semua baris detail barang
-    java.util.List<Object[]> detailRows = new java.util.ArrayList<>();
-    // Map untuk menyimpan subtotal per supplier <ID_Supplier, Nilai_Total>
-    java.util.Map<String, Integer> subTotals = new java.util.HashMap<>();
+        try (Connection conn = koneksi.getKoneksi();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-    try (Connection conn = koneksi.getKoneksi();
-         PreparedStatement pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery()) {
+            pstmt.setDate(1, new java.sql.Date(tanggalAwal.getTime()));
+            pstmt.setDate(2, new java.sql.Date(tanggalAkhir.getTime()));
 
-        // Tahap 2: Loop pertama untuk memisahkan data detail dan subtotal
-        while (rs.next()) {
-            String idSupplier = rs.getString("ID_Supplier");
-            String namaBarang = rs.getString("Nama_Barang");
-            int total = rs.getInt("Total");
+            try (ResultSet rs = pstmt.executeQuery()) {
+            
+                // Siapkan variabel untuk logika subtotal
+                java.sql.Date tanggalSaatIni = null;
+                long totalHarian = 0;
+            
+                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd-MM-yyyy");
+                java.text.NumberFormat currencyFormat = java.text.NumberFormat.getIntegerInstance();
 
-            // Abaikan baris Grand Total
-            if (idSupplier == null) {
-                continue;
+                while (rs.next()) {
+                    java.sql.Date tanggalDariDB = rs.getDate("tanggal_pembelian");
+
+                    // DETEKSI PERGANTIAN HARI
+                    // Jika tanggalSaatIni tidak kosong DAN tanggal dari DB berbeda,
+                    // artinya hari telah berakhir. Cetak subtotal untuk hari sebelumnya.
+                    if (tanggalSaatIni != null && !tanggalSaatIni.equals(tanggalDariDB)) {
+                        model.addRow(new Object[]{
+                            "", // Kolom tanggal dikosongkan
+                            "", // Kolom ID Supplier
+                            "Subtotal Hari " + dateFormat.format(tanggalSaatIni), // Teks subtotal
+                            "", // Kolom Harga Beli
+                            currencyFormat.format(totalHarian)  // Total harian
+                        });
+                    totalHarian = 0; // Reset total untuk hari yang baru
+                    }
+
+                // PROSES BARIS DETAIL SAAT INI
+                String idSupplier = rs.getString("ID_Supplier");
+                String namaBarang = rs.getString("Nama_Barang");
+                int hargaBeli = rs.getInt("Harga_Beli");
+
+                model.addRow(new Object[]{
+                    dateFormat.format(tanggalDariDB),
+                    idSupplier,
+                    namaBarang,
+                    currencyFormat.format(hargaBeli),
+                    "" // Kolom total untuk baris detail dikosongkan
+                });
+
+                // Akumulasi total untuk hari yang sedang berjalan
+                totalHarian += hargaBeli;
+                // Update tanggalSaatIni
+                tanggalSaatIni = tanggalDariDB;
             }
 
-            // Jika ini adalah baris subtotal, simpan nilainya di Map
-            if (namaBarang == null) {
-                subTotals.put(idSupplier, total);
+            // SETELAH LOOP SELESAI: Cetak subtotal untuk hari terakhir
+            if (tanggalSaatIni != null) {
+                model.addRow(new Object[]{
+                    "", "", "Subtotal Hari " + dateFormat.format(tanggalSaatIni), "", currencyFormat.format(totalHarian)
+                });
             }
-            // Jika ini adalah baris detail, simpan sebagai Object[] di List
-            else {
-                // Kolom: ID Supplier, Nama Barang, Harga Beli, Total
-                detailRows.add(new Object[]{idSupplier, namaBarang, total, ""});
-            }
+          }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+            e.printStackTrace();
         }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error memuat data: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-        return; // Hentikan eksekusi jika ada error
     }
-
-    // Tahap 3: Loop kedua untuk memproses dan menampilkan ke JTable
-    String supplierTerkini = "";
-    for (int i = 0; i < detailRows.size(); i++) {
-        Object[] currentRow = detailRows.get(i);
-        String idSupplierSaatIni = (String) currentRow[0];
-
-        // Cek apakah ini baris terakhir untuk grup supplier ini
-        boolean isLastRowInGroup = (i == detailRows.size() - 1) ||
-                                   !idSupplierSaatIni.equals(detailRows.get(i + 1)[0]);
-
-        // Jika ini baris terakhir dalam grup, ambil subtotal dari Map dan letakkan di kolom "Total"
-        if (isLastRowInGroup) {
-            if (subTotals.containsKey(idSupplierSaatIni)) {
-                currentRow[3] = subTotals.get(idSupplierSaatIni);
-            }
-        }
-
-        // Logika untuk mengosongkan ID Supplier jika sama dengan baris sebelumnya
-        if (idSupplierSaatIni.equals(supplierTerkini)) {
-            currentRow[0] = ""; // Kosongkan ID Supplier
-        } else {
-            supplierTerkini = idSupplierSaatIni; // Update supplier terkini
-        }
-        
-        // Masukkan baris yang sudah diproses ke JTable
-        model.addRow(currentRow);
-    }
-}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,22 +112,29 @@ public class panelTrSupp extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSupp = new javax.swing.JTable();
+        print = new javax.swing.JButton();
+        jdcTanggalAwal = new com.toedter.calendar.JDateChooser();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jdcTanggalAkhir = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        btnTampil = new javax.swing.JButton();
 
         setOpaque(false);
 
         tblSupp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID Supplier", "Nama Barang", "Harga Beli", "Total"
+                "Tanggal Pembelian", "ID Supplier", "Nama Barang", "Harga Beli", "Total"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true
+                true, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -134,23 +145,149 @@ public class panelTrSupp extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblSupp);
         tblSupp.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
+        print.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        print.setText("PRINT");
+        print.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printActionPerformed(evt);
+            }
+        });
+
+        jdcTanggalAwal.setDateFormatString("d MMM, yyyy");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel1.setText("Tanggal Awal");
+
+        jdcTanggalAkhir.setDateFormatString("d MMM, yyyy");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel2.setText("Tanggal Akhir");
+
+        btnTampil.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTampil.setText("TAMPIL DATA");
+        btnTampil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTampilActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jdcTanggalAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jdcTanggalAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnTampil)
+                .addGap(29, 29, 29)
+                .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jdcTanggalAwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jdcTanggalAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnTampil)
+                        .addComponent(print)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
+
+        // Ambil model dari JTable Anda saat ini
+        DefaultTableModel tableModel = (DefaultTableModel) tblSupp.getModel();
+
+        // Validasi: Jangan cetak jika tabel kosong
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada data untuk dicetak.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Ambil tanggal dari JDateChooser untuk ditampilkan di judul laporan
+        java.util.Date tanggalAwal = jdcTanggalAwal.getDate();
+        java.util.Date tanggalAkhir = jdcTanggalAkhir.getDate();
+
+        try {
+            String namaFile = "src/Report/reportSupp.jasper"; // Pastikan nama file laporan benar
+    
+            // 1. Buat DataSource dari TableModel
+            net.sf.jasperreports.engine.JRDataSource dataSource = new net.sf.jasperreports.engine.data.JRTableModelDataSource(tableModel);
+    
+            // 2. Siapkan parameter (misalnya untuk judul laporan)
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("TANGGAL_AWAL", tanggalAwal);
+            parameter.put("TANGGAL_AKHIR", tanggalAkhir);
+    
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+    
+            // 3. Isi laporan menggunakan DataSource dari tabel, BUKAN koneksi database
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, dataSource);
+    
+            JasperViewer.viewReport(jasperPrint, false);
+    
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal menampilkan laporan: " + e.getMessage());
+                e.printStackTrace();
+            }
+    }//GEN-LAST:event_printActionPerformed
+
+    private void btnTampilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTampilActionPerformed
+        // TODO add your handling code here:
+        // Di dalam event 'actionPerformed' untuk tombol 'btnTampilkan'
+        java.util.Date tglAwal = jdcTanggalAwal.getDate();
+        java.util.Date tglAkhir = jdcTanggalAkhir.getDate();
+
+        // Validasi input
+        if (tglAwal == null || tglAkhir == null) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih rentang tanggal terlebih dahulu.", "Input Tidak Lengkap", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (tglAwal.after(tglAkhir)) {
+            JOptionPane.showMessageDialog(this, "Tanggal Awal tidak boleh setelah Tanggal Akhir.", "Input Salah", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Panggil method showData dengan tanggal yang dipilih
+        showData(tglAwal, tglAkhir);
+    }//GEN-LAST:event_btnTampilActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTampil;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private com.toedter.calendar.JDateChooser jdcTanggalAkhir;
+    private com.toedter.calendar.JDateChooser jdcTanggalAwal;
+    private javax.swing.JButton print;
     private javax.swing.JTable tblSupp;
     // End of variables declaration//GEN-END:variables
 }

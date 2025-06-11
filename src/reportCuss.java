@@ -14,16 +14,26 @@ import java.awt.event.*;
 import javax.swing.table.*;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
+import java.io.File;
+import java.io.InputStream;
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author msiti
  */
-public class PanelFormCust extends javax.swing.JPanel {
+public class reportCuss extends javax.swing.JPanel {
 
     /**
      * Creates new form PanelFormCust
      */
-    public PanelFormCust() {
+    public reportCuss() {
         initComponents();
         showData();
     }
@@ -51,8 +61,8 @@ public class PanelFormCust extends javax.swing.JPanel {
                     rs.getString("Bidang_Proyek")
                 });
             }
-        } catch (Exception ex) {
-        ex.printStackTrace(); // Debugging
+        } catch (Exception ex) { // Debugging
+        // Debugging
         JOptionPane.showMessageDialog(null, "Gagal mengambil data:\n" + ex.getMessage());
         }
 }
@@ -133,6 +143,7 @@ public class PanelFormCust extends javax.swing.JPanel {
         cmbCari = new javax.swing.JComboBox<>();
         btnSearch = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setOpaque(false);
 
@@ -253,6 +264,14 @@ public class PanelFormCust extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setText("PRINT");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -296,6 +315,8 @@ public class PanelFormCust extends javax.swing.JPanel {
                                 .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtBidangProyek)
@@ -373,7 +394,8 @@ public class PanelFormCust extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1))
                         .addGap(18, 18, 18)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                 .addContainerGap())
@@ -549,6 +571,22 @@ public class PanelFormCust extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtSearchKeyPressed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       // TODO add your handling code here:
+        try {
+            String namaFile = "src/Report/report2.jasper";
+            Connection conn = koneksi.getKoneksi();
+            HashMap parameter = new  HashMap();
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+            JasperPrint jasperPrint = JasperFillManager.fillReport (jasperReport,parameter,conn);
+            JasperViewer.viewReport(jasperPrint,false);
+            //JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
@@ -556,6 +594,7 @@ public class PanelFormCust extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cmbCari;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;

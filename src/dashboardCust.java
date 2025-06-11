@@ -22,9 +22,8 @@ public class dashboardCust extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/back.jpeg"));
         backgroundPanel1.setBackgroundImage(icon.getImage());
-        greeting.setText("Hello, " + session.getUsername());
         
-        contentPanel.add(new panelPelanggan(), "Pelanggan");
+        contentPanel.add(new panelPelanggann(), "Pelanggan");
         CardLayout cl = (CardLayout) contentPanel.getLayout();
         cl.show(contentPanel, "Pelanggan");
         
@@ -82,12 +81,13 @@ public class dashboardCust extends javax.swing.JFrame {
         keluar = new javax.swing.JLabel();
         min = new javax.swing.JLabel();
         full = new javax.swing.JLabel();
-        logo = new javax.swing.JLabel();
-        greeting = new javax.swing.JLabel();
+        btnLogout = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+
+        headerPanel.setOpaque(false);
 
         keluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/close.png"))); // NOI18N
 
@@ -95,9 +95,13 @@ public class dashboardCust extends javax.swing.JFrame {
 
         full.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/full.png"))); // NOI18N
 
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/kuda.png"))); // NOI18N
-
-        greeting.setText("jLabel1");
+        btnLogout.setBackground(new java.awt.Color(255, 0, 0));
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
         headerPanel.setLayout(headerPanelLayout);
@@ -105,10 +109,8 @@ public class dashboardCust extends javax.swing.JFrame {
             headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logo)
-                .addGap(18, 18, 18)
-                .addComponent(greeting)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 532, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 522, Short.MAX_VALUE)
                 .addComponent(full)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(min)
@@ -124,13 +126,8 @@ public class dashboardCust extends javax.swing.JFrame {
                     .addComponent(full))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(headerPanelLayout.createSequentialGroup()
-                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(headerPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(logo))
-                    .addGroup(headerPanelLayout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(greeting)))
+                .addContainerGap()
+                .addComponent(btnLogout)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -152,7 +149,7 @@ public class dashboardCust extends javax.swing.JFrame {
             .addGroup(backgroundPanel1Layout.createSequentialGroup()
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
-                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
 
@@ -170,6 +167,18 @@ public class dashboardCust extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        logout();
+    }//GEN-LAST:event_btnLogoutActionPerformed
+    
+        private void logout() {
+        loginKonsumen open = new loginKonsumen();
+        open.setVisible(true);
+        
+        this.dispose();
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -207,12 +216,11 @@ public class dashboardCust extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private BackgroundPanel backgroundPanel1;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel full;
-    private javax.swing.JLabel greeting;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JLabel keluar;
-    private javax.swing.JLabel logo;
     private javax.swing.JLabel min;
     // End of variables declaration//GEN-END:variables
 }

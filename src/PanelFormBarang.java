@@ -9,6 +9,11 @@ import javax.swing.table.DefaultTableModel;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.table.*;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author msiti
@@ -36,6 +41,8 @@ public class PanelFormBarang extends javax.swing.JPanel {
         return id + " - " + nama; // Contoh: "SUP001 - PT. Maju Bersama"
     }
 }
+    
+    
     /**
      * Creates new form PanelFormBarang
      */
@@ -44,6 +51,52 @@ public class PanelFormBarang extends javax.swing.JPanel {
         showData();
         populateSupplierComboBox();
     }
+    
+    private void cariData() {
+    DefaultTableModel model = (DefaultTableModel) tblBarang.getModel();
+    model.setRowCount(0);
+
+    Locale indonesia = new Locale("id", "ID");
+    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(indonesia);
+    
+    String kolom = cmbCari.getSelectedItem().toString();
+    String keyword = txtSearch.getText();
+
+    String sql = "SELECT B.ID_Barang, B.Nama_Barang, B.ID_Supplier, B.tanggal_pembelian, S.Nama_Perusahaan, B.Harga_Beli, B.Harga_Jual " +
+                 "FROM data.Barang B JOIN data.Supplier S ON B.ID_Supplier = S.ID_Supplier WHERE " + kolom + " LIKE '%" + keyword + "%'";
+    try {
+        Connection conn = koneksi.getKoneksi();
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery(sql);
+        while (rs.next()) {
+            String formattedHargaBeli = currencyFormatter.format(rs.getInt("Harga_Beli"));
+            String formattedHargaJual = currencyFormatter.format(rs.getInt("Harga_Jual"));
+            java.sql.Date tanggal = rs.getDate("tanggal_pembelian");
+                String tanggalFormatted = ""; // Default string kosong
+                if (tanggal != null) {
+                    // 2. Buat formatter dengan pola yang Anda inginkan
+                    java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yyyy");
+
+                    // 3. Format objek Date menjadi sebuah String
+                    tanggalFormatted = formatter.format(tanggal);
+                }
+            
+            model.addRow(new Object[]{
+                rs.getString("ID_Barang"),
+                rs.getString("Nama_Barang"),
+                rs.getString("ID_Supplier"),
+                tanggalFormatted,
+                rs.getString("Nama_Perusahaan"),
+                formattedHargaBeli,
+                formattedHargaJual,
+            });
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace(); // Debugging
+        JOptionPane.showMessageDialog(null, "Gagal mengambil data:\n" + ex.getMessage());
+    }
+}
+
 
     private void showData() {
         DefaultTableModel model = (DefaultTableModel) tblBarang.getModel();
@@ -52,7 +105,7 @@ public class PanelFormBarang extends javax.swing.JPanel {
         Locale indonesia = new Locale("id", "ID");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(indonesia);
 
-        String sql = "SELECT B.ID_Barang, B.Nama_Barang, B.ID_Supplier, S.Nama_Perusahaan, B.Harga_Beli, B.Harga_Jual " +
+        String sql = "SELECT B.ID_Barang, B.Nama_Barang, B.ID_Supplier, B.tanggal_pembelian, S.Nama_Perusahaan, B.Harga_Beli, B.Harga_Jual " +
                      "FROM data.Barang B JOIN data.Supplier S ON B.ID_Supplier = S.ID_Supplier";
         
         try (Connection conn = koneksi.getKoneksi(); // PANGGIL METODE KONEKSI ANDA DI SINI
@@ -62,11 +115,21 @@ public class PanelFormBarang extends javax.swing.JPanel {
             while (rs.next()) {
                 String formattedHargaBeli = currencyFormatter.format(rs.getInt("Harga_Beli"));
                 String formattedHargaJual = currencyFormatter.format(rs.getInt("Harga_Jual"));
+                java.sql.Date tanggal = rs.getDate("tanggal_pembelian");
+                String tanggalFormatted = ""; // Default string kosong
+                if (tanggal != null) {
+                    // 2. Buat formatter dengan pola yang Anda inginkan
+                    java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yyyy");
+
+                    // 3. Format objek Date menjadi sebuah String
+                    tanggalFormatted = formatter.format(tanggal);
+                }
 
                 model.addRow(new Object[]{
                     rs.getString("ID_Barang"),
                     rs.getString("Nama_Barang"),
                     rs.getString("ID_Supplier"),
+                    tanggalFormatted,
                     rs.getString("Nama_Perusahaan"),
                     formattedHargaBeli,
                     formattedHargaJual
@@ -84,6 +147,7 @@ public class PanelFormBarang extends javax.swing.JPanel {
         txtHargaBeli.setText("");
         txtHargaJual.setText("");
         txtIdBarang.setEditable(true);
+        txtSearch.setText("");
     }
     
     private void populateSupplierComboBox() {
@@ -132,6 +196,13 @@ public class PanelFormBarang extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblBarang = new javax.swing.JTable();
         cmbIdSupplier = new javax.swing.JComboBox<SupplierItem>();
+        jLabel1 = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        cmbCari = new javax.swing.JComboBox<>();
+        btnSearch = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jdcTanggalBeli = new com.toedter.calendar.JDateChooser();
 
         setOpaque(false);
 
@@ -195,13 +266,13 @@ public class PanelFormBarang extends javax.swing.JPanel {
         tblBarang.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         tblBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Barang", "Nama Barang", "ID Supplier", "Nama Supplier", "Harga Beli", "Harga Jual"
+                "ID Barang", "Nama Barang", "ID Supplier", "Tanggal Beli", "Nama Perusahaan", "Harga Beli", "Harga Jual"
             }
         ));
         tblBarang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -211,40 +282,88 @@ public class PanelFormBarang extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(tblBarang);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("Cari Data");
+
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+        });
+
+        cmbCari.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID_Barang", "Nama_Barang", "ID_Supplier", "Harga_Beli", "Harga_Jual" }));
+
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSearch.setText("CARI");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClear.setText("CLEAR");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("Tanggal Beli");
+
+        jdcTanggalBeli.setDateFormatString("d MMM, yyyy");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 706, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtIdBarang)
-                    .addComponent(txtNamaBarang)
-                    .addComponent(cmbIdSupplier, 0, 175, Short.MAX_VALUE))
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtHargaJual, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                    .addComponent(txtHargaBeli))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtIdBarang)
+                                    .addComponent(txtNamaBarang)
+                                    .addComponent(cmbIdSupplier, 0, 175, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(55, 55, 55)
+                                .addComponent(jdcTanggalBeli, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtHargaBeli)
+                                    .addComponent(cmbCari, 0, 163, Short.MAX_VALUE)
+                                    .addComponent(txtHargaJual)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(96, Short.MAX_VALUE)
-                .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100)
-                .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100)
-                .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,14 +390,29 @@ public class PanelFormBarang extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbIdSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbIdSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(cmbCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch)
+                        .addComponent(jLabel3))
+                    .addComponent(jdcTanggalBeli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(edit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(btnClear)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -289,7 +423,17 @@ public class PanelFormBarang extends javax.swing.JPanel {
         
         SupplierItem selectedSupplier = (SupplierItem) cmbIdSupplier.getSelectedItem();
         String idSupplier = selectedSupplier.getId();
+        
+        java.util.Date tanggalBeli = jdcTanggalBeli.getDate();
 
+        // Validasi: Pastikan tanggal sudah dipilih
+        if (tanggalBeli == null) {
+            JOptionPane.showMessageDialog(this, "Tanggal Beli wajib diisi!");
+            return;
+        }
+        
+        java.sql.Date sqlTanggalBeli = new java.sql.Date(tanggalBeli.getTime());
+        
         if (idSupplier.isEmpty()) { 
             JOptionPane.showMessageDialog(this, "Pilih supplier dari daftar!", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
@@ -315,15 +459,16 @@ public class PanelFormBarang extends javax.swing.JPanel {
             return;
         }
 
-        String sql = "INSERT INTO data.Barang (ID_Barang, Nama_Barang, ID_Supplier, Harga_Beli, Harga_Jual) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO data.Barang (ID_Barang, Nama_Barang, ID_Supplier, tanggal_pembelian, Harga_Beli, Harga_Jual) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = koneksi.getKoneksi();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, idBarang);
             pstmt.setString(2, namaBarang);
             pstmt.setString(3, idSupplier);
-            pstmt.setInt(4, hargaBeli);
-            pstmt.setInt(5, hargaJual);
+            pstmt.setDate(4, sqlTanggalBeli); // Gunakan setDate untuk tanggal
+            pstmt.setInt(5, hargaBeli);
+            pstmt.setInt(6, hargaJual);
 
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
@@ -350,46 +495,56 @@ public class PanelFormBarang extends javax.swing.JPanel {
         
         SupplierItem selectedSupplier = (SupplierItem) cmbIdSupplier.getSelectedItem();
         String idSupplier = selectedSupplier.getId();
-
+        
+        java.util.Date tanggalBeli = jdcTanggalBeli.getDate();
+        if (tanggalBeli == null) {
+            JOptionPane.showMessageDialog(this, "Tanggal Beli wajib diisi!");
+            return;
+        }
+        
+        java.sql.Date sqlTanggalBeli = new java.sql.Date(tanggalBeli.getTime());
         if (idSupplier.isEmpty()) { 
             JOptionPane.showMessageDialog(this, "Pilih supplier dari daftar!", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
-        }
+         }
 
-        int hargaBeli = 0;
-        int hargaJual = 0;
+         int hargaBeli = 0;
+         int hargaJual = 0;
 
-        if (idBarang.isEmpty()) {
+         if (idBarang.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Pilih data di tabel atau masukkan ID Barang yang akan diedit.", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
-        }
-        if (namaBarang.isEmpty() || txtHargaBeli.getText().isEmpty() || txtHargaJual.getText().isEmpty()) {
+         }
+         
+         if (namaBarang.isEmpty() || txtHargaBeli.getText().isEmpty() || txtHargaJual.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama Barang, Harga Beli, dan Harga Jual harus diisi untuk mengedit!", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
-        }
+         }
 
-        try {
+         try {
             Locale indonesia = new Locale("id", "ID");
             NumberFormat numberParser = NumberFormat.getNumberInstance(indonesia);
 
             hargaBeli = numberParser.parse(txtHargaBeli.getText()).intValue();
             hargaJual = numberParser.parse(txtHargaJual.getText()).intValue();
 
-        } catch (ParseException e) {
+         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Format Harga Beli atau Harga Jual tidak valid. Gunakan format angka yang benar (contoh: 100.000, atau 50000).", "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
-        }
+         }
 
-        String sql = "UPDATE data.Barang SET Nama_Barang = ?, ID_Supplier = ?, Harga_Beli = ?, Harga_Jual = ? WHERE ID_Barang = ?";
-        try (Connection conn = koneksi.getKoneksi();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+         String sql = "UPDATE data.barang SET Nama_Barang = ?, ID_Supplier = ?, tanggal_pembelian = ?, Harga_Beli = ?, Harga_Jual = ? " +
+                 "WHERE ID_Barang = ?";
+         try (Connection conn = koneksi.getKoneksi();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, namaBarang);
             pstmt.setString(2, idSupplier);
-            pstmt.setInt(3, hargaBeli);
-            pstmt.setInt(4, hargaJual);
-            pstmt.setString(5, idBarang);
-
+            pstmt.setDate(3, sqlTanggalBeli); // Set tanggal yang baru
+            pstmt.setInt(4, hargaBeli);
+            pstmt.setInt(5, hargaJual);
+            pstmt.setString(6, idBarang);
+                   
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 JOptionPane.showMessageDialog(this, "Data barang berhasil diupdate!");
@@ -405,8 +560,8 @@ public class PanelFormBarang extends javax.swing.JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Error mengupdate data: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
             }
-            e.printStackTrace();
-        }
+                e.printStackTrace();
+            }
     }//GEN-LAST:event_editActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
@@ -463,10 +618,31 @@ public class PanelFormBarang extends javax.swing.JPanel {
                     break;
                 }
             }
-
+            
             try {
-                String hargaBeliFormatted = model.getValueAt(selectedRow, 4).toString();
-                String hargaJualFormatted = model.getValueAt(selectedRow, 5).toString();
+                // 1. Ambil data tanggal dari tabel sebagai String
+                String tanggalStrDariTabel = model.getValueAt(selectedRow, 3).toString();
+
+                // 2. Buat formatter dengan pola yang SAMA PERSIS seperti saat Anda mengisinya
+                // Asumsi formatnya adalah "dd-MM-yyyy HH:mm:ss"
+                java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("dd-MM-yyyy");
+
+                // 3. Parse (ubah) String menjadi objek Date
+                java.util.Date tanggalBeli = formatter.parse(tanggalStrDariTabel);
+
+                // 4. Set tanggal di JDateChooser dengan objek Date yang sudah benar
+                jdcTanggalBeli.setDate(tanggalBeli);
+
+            } catch (java.text.ParseException e) {
+                // Tangani jika format tanggal di tabel tidak sesuai
+                JOptionPane.showMessageDialog(this, "Gagal membaca format tanggal dari tabel.");
+                jdcTanggalBeli.setDate(null); // Kosongkan JDateChooser jika error
+                e.printStackTrace();
+            }
+            
+            try {
+                String hargaBeliFormatted = model.getValueAt(selectedRow, 5).toString();
+                String hargaJualFormatted = model.getValueAt(selectedRow, 6).toString();
 
                 Number hargaBeliNum = currencyFormatter.parse(hargaBeliFormatted);
                 Number hargaJualNum = currencyFormatter.parse(hargaJualFormatted);
@@ -489,22 +665,47 @@ public class PanelFormBarang extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNamaBarangActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        cariData();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        kosong();
+        showData();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnSearch.doClick();
+        }
+    }//GEN-LAST:event_txtSearchKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> cmbCari;
     private javax.swing.JComboBox<SupplierItem> cmbIdSupplier;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
+    private com.toedter.calendar.JDateChooser jdcTanggalBeli;
     private javax.swing.JButton save;
     private javax.swing.JTable tblBarang;
     private javax.swing.JTextField txtHargaBeli;
     private javax.swing.JTextField txtHargaJual;
     private javax.swing.JTextField txtIdBarang;
     private javax.swing.JTextField txtNamaBarang;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
