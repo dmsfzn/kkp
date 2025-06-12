@@ -20,6 +20,9 @@ public class loginFrame extends javax.swing.JFrame {
     public loginFrame() {
         initComponents();
         setLocationRelativeTo(null);
+        btnKeluar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnMasuk.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnKembali.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         txtUname.setText("Masukkan Username");
         txtUname.setForeground(new java.awt.Color(160, 160, 160));
@@ -40,7 +43,7 @@ public class loginFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        exit_btn = new javax.swing.JLabel();
+        btnKeluar = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -50,8 +53,8 @@ public class loginFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtPwd = new javax.swing.JPasswordField();
         sepPwd = new javax.swing.JSeparator();
-        masuk_btn = new javax.swing.JToggleButton();
-        jLabel1 = new javax.swing.JLabel();
+        btnMasuk = new javax.swing.JToggleButton();
+        btnKembali = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -68,10 +71,10 @@ public class loginFrame extends javax.swing.JFrame {
             }
         });
 
-        exit_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
-        exit_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
+        btnKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exit_btnMouseClicked(evt);
+                btnKeluarMouseClicked(evt);
             }
         });
 
@@ -120,21 +123,21 @@ public class loginFrame extends javax.swing.JFrame {
             }
         });
 
-        masuk_btn.setBackground(new java.awt.Color(10, 32, 146));
-        masuk_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        masuk_btn.setText("MASUK");
-        masuk_btn.addActionListener(new java.awt.event.ActionListener() {
+        btnMasuk.setBackground(new java.awt.Color(10, 32, 146));
+        btnMasuk.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnMasuk.setText("MASUK");
+        btnMasuk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                masuk_btnActionPerformed(evt);
+                btnMasukActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/back.png"))); // NOI18N
-        jLabel1.setText("KEMBALI");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKembali.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/back.png"))); // NOI18N
+        btnKembali.setText("KEMBALI");
+        btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                btnKembaliMouseClicked(evt);
             }
         });
 
@@ -156,7 +159,7 @@ public class loginFrame extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 185, Short.MAX_VALUE)
-                        .addComponent(exit_btn)))
+                        .addComponent(btnKeluar)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -171,13 +174,13 @@ public class loginFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(270, 270, 270)
-                        .addComponent(masuk_btn))
+                        .addComponent(btnMasuk))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(268, 268, 268)
                         .addComponent(jLabel4))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
-                        .addComponent(jLabel1)))
+                        .addComponent(btnKembali)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -188,7 +191,7 @@ public class loginFrame extends javax.swing.JFrame {
                     .addComponent(logo)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(exit_btn))
+                        .addComponent(btnKeluar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,9 +209,9 @@ public class loginFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sepPwd, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(masuk_btn)
+                .addComponent(btnMasuk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
 
@@ -237,9 +240,9 @@ public class loginFrame extends javax.swing.JFrame {
         this.setLocation(x - xx, y - xy);
     }//GEN-LAST:event_jPanel1MouseDragged
 
-    private void exit_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exit_btnMouseClicked
+    private void btnKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKeluarMouseClicked
         dispose();
-    }//GEN-LAST:event_exit_btnMouseClicked
+    }//GEN-LAST:event_btnKeluarMouseClicked
 
     private void txtUnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUnameFocusGained
         if (txtUname.getText().equals("Masukkan Username")) {
@@ -278,11 +281,11 @@ public class loginFrame extends javax.swing.JFrame {
     private void txtPwdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPwdKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            masuk_btn.doClick();
+            btnMasuk.doClick();
         }
     }//GEN-LAST:event_txtPwdKeyPressed
 
-    private void masuk_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masuk_btnActionPerformed
+    private void btnMasukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasukActionPerformed
         // TODO add your handling code here:
         String username = txtUname.getText();
         String password = new String (txtPwd.getPassword());
@@ -301,21 +304,29 @@ public class loginFrame extends javax.swing.JFrame {
                 "Sukses", JOptionPane.INFORMATION_MESSAGE);
         
             // Buka form berikutnya
-            homepage();
+            session.setUsername(1, username);
+            dashboard();
         } else {
             JOptionPane.showMessageDialog(loginFrame.this, 
                         "Username atau Password salah!", 
                         "Error", 
                         JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_masuk_btnActionPerformed
+    }//GEN-LAST:event_btnMasukActionPerformed
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
         // TODO add your handling code here:
         homepage();
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_btnKembaliMouseClicked
     
     private void homepage() {
+        homepage open = new homepage();
+        open.setVisible(true);
+        
+        this.dispose();
+    }
+    
+    private void dashboard() {
         dashboard open = new dashboard();
         open.setVisible(true);
         
@@ -330,7 +341,7 @@ public class loginFrame extends javax.swing.JFrame {
             Connection conn = koneksi.getKoneksi();
             
             // Query untuk cek login
-            String sql = "SELECT * FROM user.pengguna WHERE username=? AND password=?";
+            String sql = "SELECT * FROM user.admin WHERE username=? AND password=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, password);
@@ -394,14 +405,14 @@ public class loginFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel exit_btn;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel btnKeluar;
+    private javax.swing.JLabel btnKembali;
+    private javax.swing.JToggleButton btnMasuk;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel logo;
-    private javax.swing.JToggleButton masuk_btn;
     private javax.swing.JSeparator sepPwd;
     private javax.swing.JSeparator sepUname;
     private javax.swing.JPasswordField txtPwd;

@@ -65,7 +65,7 @@
                               <Component id="jSeparator1" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace pref="167" max="32767" attributes="0"/>
-                          <Component id="exit_btn" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnKeluar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -77,7 +77,7 @@
                               </Group>
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                   <Component id="txtPwd" min="-2" pref="161" max="-2" attributes="0"/>
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnRegister" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                       <Component id="sepPwd2" min="-2" pref="149" max="-2" attributes="0"/>
@@ -108,11 +108,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnKembali" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="267" max="-2" attributes="0"/>
-                          <Component id="masuk_btn" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnMasuk" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -127,7 +127,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                              <Component id="exit_btn" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnKeluar" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
@@ -155,11 +155,11 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="sepPwd2" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnRegister" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="masuk_btn" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnMasuk" min="-2" max="-2" attributes="0"/>
                   <EmptySpace pref="10" max="32767" attributes="0"/>
-                  <Component id="jLabel2" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="btnKembali" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -183,7 +183,7 @@
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPwdKeyPressed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JToggleButton" name="masuk_btn">
+        <Component class="javax.swing.JToggleButton" name="btnMasuk">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="92" green="20" red="a" type="rgb"/>
@@ -194,17 +194,17 @@
             <Property name="text" type="java.lang.String" value="MASUK"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="masuk_btnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMasukActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="exit_btn">
+        <Component class="javax.swing.JLabel" name="btnKeluar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/img/exit_btn.png"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="exit_btnMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnKeluarMouseClicked"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="logo">
@@ -263,7 +263,7 @@
             <Property name="text" type="java.lang.String" value="PASSWORD"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="btnRegister">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="0"/>
@@ -274,14 +274,14 @@
             <Property name="text" type="java.lang.String" value="Belum Punya Akun? Klik disini"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnRegisterMouseClicked"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="sepPwd1">
         </Component>
         <Component class="javax.swing.JSeparator" name="sepPwd2">
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="btnKembali">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
@@ -292,7 +292,7 @@
             <Property name="text" type="java.lang.String" value="KEMBALI"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel2MouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnKembaliMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

@@ -1,3 +1,8 @@
+
+import java.awt.Cursor;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,12 +16,19 @@
 public class homepage extends javax.swing.JFrame {
 
     int xx, xy;
-    /**
-     * Creates new form homepage
-     */
     public homepage() {
         initComponents();
         setLocationRelativeTo(null);
+        btnKeluar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnLoginKaryawan.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnLoginKonsumen.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        btnKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                System.exit(0); // keluar aplikasi
+            }
+        });
     }
 
     /**
@@ -30,9 +42,9 @@ public class homepage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnKeluar = new javax.swing.JLabel();
+        btnLoginKaryawan = new javax.swing.JButton();
+        btnLoginKonsumen = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,38 +65,28 @@ public class homepage extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/serdadu_logo.jpg"))); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
-            }
-        });
+        btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 255));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/karyawan.png"))); // NOI18N
-        jButton1.setText("Login Karyawan");
-        jButton1.setBorderPainted(false);
-        jButton1.setContentAreaFilled(false);
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
-            }
-        });
-
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user.png"))); // NOI18N
-        jButton2.setText("Login Konsumen");
-        jButton2.setBorderPainted(false);
-        jButton2.setContentAreaFilled(false);
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
-            }
-        });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnLoginKaryawan.setBackground(new java.awt.Color(204, 204, 255));
+        btnLoginKaryawan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLoginKaryawan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/karyawan.png"))); // NOI18N
+        btnLoginKaryawan.setText("Login Karyawan");
+        btnLoginKaryawan.setBorderPainted(false);
+        btnLoginKaryawan.setContentAreaFilled(false);
+        btnLoginKaryawan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnLoginKaryawanActionPerformed(evt);
+            }
+        });
+
+        btnLoginKonsumen.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLoginKonsumen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/user.png"))); // NOI18N
+        btnLoginKonsumen.setText("Login Konsumen");
+        btnLoginKonsumen.setBorderPainted(false);
+        btnLoginKonsumen.setContentAreaFilled(false);
+        btnLoginKonsumen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginKonsumenActionPerformed(evt);
             }
         });
 
@@ -101,13 +103,13 @@ public class homepage extends javax.swing.JFrame {
                 .addGap(119, 119, 119)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(btnKeluar)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(75, 75, 75)
-                .addComponent(jButton1)
+                .addComponent(btnLoginKaryawan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnLoginKonsumen)
                 .addGap(75, 75, 75))
         );
         jPanel1Layout.setVerticalGroup(
@@ -118,14 +120,14 @@ public class homepage extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2)))
+                            .addComponent(btnKeluar)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addComponent(jLabel3)))
                 .addGap(89, 89, 89)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLoginKaryawan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLoginKonsumen, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(94, Short.MAX_VALUE))
         );
 
@@ -143,24 +145,10 @@ public class homepage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_jLabel2MouseClicked
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-        loginFrame();
-    }//GEN-LAST:event_jButton1MouseClicked
-
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+    private void btnLoginKonsumenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginKonsumenActionPerformed
         // TODO add your handling code here:
         loginKonsumen();
-    }//GEN-LAST:event_jButton2MouseClicked
+    }//GEN-LAST:event_btnLoginKonsumenActionPerformed
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
         // TODO add your handling code here:
@@ -174,6 +162,11 @@ public class homepage extends javax.swing.JFrame {
         xx = evt.getX();
         xy = evt.getY();
     }//GEN-LAST:event_jPanel1MousePressed
+
+    private void btnLoginKaryawanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginKaryawanActionPerformed
+        // TODO add your handling code here:
+        loginFrame();
+    }//GEN-LAST:event_btnLoginKaryawanActionPerformed
     
     private void loginFrame (){
         loginFrame dashboard = new loginFrame();
@@ -225,10 +218,10 @@ public class homepage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel btnKeluar;
+    private javax.swing.JButton btnLoginKaryawan;
+    private javax.swing.JButton btnLoginKonsumen;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

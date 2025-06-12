@@ -157,7 +157,7 @@ public class dashboard extends javax.swing.JFrame {
         menuLogout.addMouseListener(new java.awt.event.MouseAdapter(){ 
         @Override
         public void mouseClicked(java.awt.event.MouseEvent evt) {
-        logout();
+            logout();
         }
         });
 
@@ -178,6 +178,7 @@ public class dashboard extends javax.swing.JFrame {
     
     private void logout() {
         loginFrame open = new loginFrame();
+        session.clearSession();
         open.setVisible(true);
         
         this.dispose();

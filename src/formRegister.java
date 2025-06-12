@@ -22,6 +22,9 @@ public class formRegister extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         addFieldPlaceholders();
+        btnKeluar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnMasuk.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnKembali.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         lblerorTelpon.setText("");
         lblerorEmail.setText("");
@@ -52,8 +55,8 @@ public class formRegister extends javax.swing.JFrame {
         txtPassword = new javax.swing.JPasswordField();
         txtRepassword = new javax.swing.JPasswordField();
         btnKembali = new javax.swing.JLabel();
-        btnRegister = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        btnMasuk = new javax.swing.JLabel();
+        btnKeluar = new javax.swing.JLabel();
         lblInfo = new javax.swing.JLabel();
         lblerorTelpon = new javax.swing.JLabel();
         lblerorEmail = new javax.swing.JLabel();
@@ -93,22 +96,22 @@ public class formRegister extends javax.swing.JFrame {
             }
         });
 
-        btnRegister.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnRegister.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/next.png"))); // NOI18N
-        btnRegister.setText("NEXT");
-        btnRegister.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnRegister.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnMasuk.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnMasuk.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnMasuk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/next.png"))); // NOI18N
+        btnMasuk.setText("NEXT");
+        btnMasuk.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnMasuk.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnMasuk.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnRegisterMouseClicked(evt);
+                btnMasukMouseClicked(evt);
             }
         });
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
+        btnKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
+                btnKeluarMouseClicked(evt);
             }
         });
 
@@ -137,7 +140,7 @@ public class formRegister extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnKembali)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegister)
+                        .addComponent(btnMasuk)
                         .addGap(67, 67, 67))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,19 +155,20 @@ public class formRegister extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(lblerorEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                                 .addComponent(lblInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                                .addComponent(txtTelpon, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                                .addComponent(txtNama)
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtRepassword, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtRepassword, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtTelpon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                                    .addComponent(txtNama, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblerorPwd, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblerorUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblerorTelpon, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(38, 38, 38))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
+                .addComponent(btnKeluar)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -176,7 +180,7 @@ public class formRegister extends javax.swing.JFrame {
                         .addComponent(jLabel3))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel9)
+                        .addComponent(btnKeluar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30)
@@ -212,7 +216,7 @@ public class formRegister extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnKembali)
-                    .addComponent(btnRegister))
+                    .addComponent(btnMasuk))
                 .addGap(71, 71, 71))
         );
 
@@ -416,13 +420,13 @@ public class formRegister extends javax.swing.JFrame {
                
         if (nama.isEmpty() || noTelpon.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty()) {
             lblInfo.setText("Semua field harus diisi!");
-            btnRegister.setEnabled(true);
+            btnMasuk.setEnabled(true);
             return;
         }
         
         if (!password.equals(rePassword)) {
             lblerorPwd.setText("Password dan Re-enter Password tidak sama.");
-            btnRegister.setEnabled(true);
+            btnMasuk.setEnabled(true);
             return;
         }
         
@@ -453,12 +457,12 @@ public class formRegister extends javax.swing.JFrame {
         return password;
     }
     
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+    private void btnKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKeluarMouseClicked
         // TODO add your handling code here:
         dispose();
-    }//GEN-LAST:event_jLabel9MouseClicked
+    }//GEN-LAST:event_btnKeluarMouseClicked
 
-    private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
+    private void btnMasukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasukMouseClicked
         // TODO add your handling code here:
         lblerorTelpon.setText("");
         lblerorEmail.setText("");
@@ -466,7 +470,7 @@ public class formRegister extends javax.swing.JFrame {
         lblerorPwd.setText("");
         lblInfo.setText("");
         registerUser();
-    }//GEN-LAST:event_btnRegisterMouseClicked
+    }//GEN-LAST:event_btnMasukMouseClicked
 
     private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
         loginKonsumen();
@@ -488,15 +492,15 @@ public class formRegister extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btnKeluar;
     private javax.swing.JLabel btnKembali;
-    private javax.swing.JLabel btnRegister;
+    private javax.swing.JLabel btnMasuk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JLabel lblerorEmail;

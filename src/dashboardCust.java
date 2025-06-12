@@ -174,6 +174,7 @@ public class dashboardCust extends javax.swing.JFrame {
     
         private void logout() {
         loginKonsumen open = new loginKonsumen();
+        session.clearSession();
         open.setVisible(true);
         
         this.dispose();

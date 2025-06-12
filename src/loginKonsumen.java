@@ -20,6 +20,10 @@ public class loginKonsumen extends javax.swing.JFrame {
     public loginKonsumen() {
         initComponents();
         setLocationRelativeTo(null);
+        btnKeluar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnMasuk.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnKembali.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         txtUname.setText("Masukkan Username");
         txtUname.setForeground(new java.awt.Color(160, 160, 160));
@@ -40,8 +44,8 @@ public class loginKonsumen extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         txtPwd = new javax.swing.JPasswordField();
-        masuk_btn = new javax.swing.JToggleButton();
-        exit_btn = new javax.swing.JLabel();
+        btnMasuk = new javax.swing.JToggleButton();
+        btnKeluar = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -49,10 +53,10 @@ public class loginKonsumen extends javax.swing.JFrame {
         txtUname = new javax.swing.JTextField();
         sepUname = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        btnRegister = new javax.swing.JLabel();
         sepPwd1 = new javax.swing.JSeparator();
         sepPwd2 = new javax.swing.JSeparator();
-        jLabel2 = new javax.swing.JLabel();
+        btnKembali = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -89,19 +93,19 @@ public class loginKonsumen extends javax.swing.JFrame {
             }
         });
 
-        masuk_btn.setBackground(new java.awt.Color(10, 32, 146));
-        masuk_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        masuk_btn.setText("MASUK");
-        masuk_btn.addActionListener(new java.awt.event.ActionListener() {
+        btnMasuk.setBackground(new java.awt.Color(10, 32, 146));
+        btnMasuk.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnMasuk.setText("MASUK");
+        btnMasuk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                masuk_btnActionPerformed(evt);
+                btnMasukActionPerformed(evt);
             }
         });
 
-        exit_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
-        exit_btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/exit_btn.png"))); // NOI18N
+        btnKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                exit_btnMouseClicked(evt);
+                btnKeluarMouseClicked(evt);
             }
         });
 
@@ -132,21 +136,21 @@ public class loginKonsumen extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("PASSWORD");
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 204, 255));
-        jLabel1.setText("Belum Punya Akun? Klik disini");
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnRegister.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        btnRegister.setForeground(new java.awt.Color(102, 204, 255));
+        btnRegister.setText("Belum Punya Akun? Klik disini");
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                btnRegisterMouseClicked(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/back.png"))); // NOI18N
-        jLabel2.setText("KEMBALI");
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnKembali.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/back.png"))); // NOI18N
+        btnKembali.setText("KEMBALI");
+        btnKembali.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
+                btnKembaliMouseClicked(evt);
             }
         });
 
@@ -164,7 +168,7 @@ public class loginKonsumen extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
-                        .addComponent(exit_btn)
+                        .addComponent(btnKeluar)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -174,7 +178,7 @@ public class loginKonsumen extends javax.swing.JFrame {
                                 .addComponent(sepUname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtPwd, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1)
+                                .addComponent(btnRegister)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(6, 6, 6)
                                     .addComponent(sepPwd2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -194,10 +198,10 @@ public class loginKonsumen extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(56, 56, 56)
-                        .addComponent(jLabel2))
+                        .addComponent(btnKembali))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(267, 267, 267)
-                        .addComponent(masuk_btn)))
+                        .addComponent(btnMasuk)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -208,7 +212,7 @@ public class loginKonsumen extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(exit_btn))
+                            .addComponent(btnKeluar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(logo))
@@ -230,11 +234,11 @@ public class loginKonsumen extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sepPwd2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jLabel1)
+                .addComponent(btnRegister)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(masuk_btn)
+                .addComponent(btnMasuk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
         );
 
@@ -271,11 +275,11 @@ public class loginKonsumen extends javax.swing.JFrame {
     private void txtPwdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPwdKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            masuk_btn.doClick();
+            btnMasuk.doClick();
         }
     }//GEN-LAST:event_txtPwdKeyPressed
 
-    private void masuk_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masuk_btnActionPerformed
+    private void btnMasukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasukActionPerformed
         // TODO add your handling code here:
         String username = txtUname.getText();
         String password = new String (txtPwd.getPassword());
@@ -288,11 +292,11 @@ public class loginKonsumen extends javax.swing.JFrame {
         }
         
         cekLogin();
-    }//GEN-LAST:event_masuk_btnActionPerformed
+    }//GEN-LAST:event_btnMasukActionPerformed
 
-    private void exit_btnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exit_btnMouseClicked
+    private void btnKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKeluarMouseClicked
         dispose();
-    }//GEN-LAST:event_exit_btnMouseClicked
+    }//GEN-LAST:event_btnKeluarMouseClicked
 
     private void txtUnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUnameFocusGained
         if (txtUname.getText().equals("Masukkan Username")) {
@@ -310,10 +314,10 @@ public class loginKonsumen extends javax.swing.JFrame {
         sepUname.setForeground(new java.awt.Color(189, 189, 189));
     }//GEN-LAST:event_txtUnameFocusLost
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
         // TODO add your handling code here:
         formRegister();
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_btnRegisterMouseClicked
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         // TODO add your handling code here:
@@ -328,10 +332,10 @@ public class loginKonsumen extends javax.swing.JFrame {
         this.setLocation(x - xx, y - xy);
     }//GEN-LAST:event_jPanel1MouseDragged
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+    private void btnKembaliMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnKembaliMouseClicked
         // TODO add your handling code here:
         homepage();
-    }//GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_btnKembaliMouseClicked
 
     private void dashboardCust() {
         dashboardCust sh = new dashboardCust();
@@ -426,15 +430,15 @@ public class loginKonsumen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel exit_btn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel btnKeluar;
+    private javax.swing.JLabel btnKembali;
+    private javax.swing.JToggleButton btnMasuk;
+    private javax.swing.JLabel btnRegister;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel logo;
-    private javax.swing.JToggleButton masuk_btn;
     private javax.swing.JSeparator sepPwd1;
     private javax.swing.JSeparator sepPwd2;
     private javax.swing.JSeparator sepUname;
