@@ -7,7 +7,7 @@ public class koneksi {
         if (koneksi == null || isClosed(koneksi)) { // Check if the connection is null or closed
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                String url = "jdbc:mysql://localhost/user";
+                String url = "jdbc:mysql://localhost/data";
                 String user = "root";
                 String password = "";
                 koneksi = DriverManager.getConnection(url, user, password);

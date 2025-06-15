@@ -308,7 +308,7 @@ public class formRegister extends javax.swing.JFrame {
     }
 
     private boolean isNoTelponExist(String noTelpon) {
-        String query = "SELECT COUNT(*) FROM user.konsumen WHERE no_telpon = ?";
+        String query = "SELECT COUNT(*) FROM data.konsumen WHERE no_telpon = ?";
         try (Connection conn = koneksi.getKoneksi();
             PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, noTelpon);
@@ -324,7 +324,7 @@ public class formRegister extends javax.swing.JFrame {
     }
 
     private boolean isEmailExist(String email) {
-        String query = "SELECT COUNT(*) FROM user.konsumen WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM data.konsumen WHERE email = ?";
         try (Connection conn = koneksi.getKoneksi();
             PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, email);
@@ -340,7 +340,7 @@ public class formRegister extends javax.swing.JFrame {
     }
 
     private boolean isUsernameExist(String username) {
-        String query = "SELECT COUNT(*) FROM user.konsumen WHERE username = ?";
+        String query = "SELECT COUNT(*) FROM data.konsumen WHERE username = ?";
         try (Connection conn = koneksi.getKoneksi();
             PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, username);
@@ -390,7 +390,7 @@ public class formRegister extends javax.swing.JFrame {
             }
 
             PreparedStatement insertStmt = conn.prepareStatement(
-            "INSERT INTO user.konsumen (nama, no_telpon, email, username, password) VALUES (?, ?, ?, ?, ?)");
+            "INSERT INTO data.konsumen (nama, no_telpon, email, username, password) VALUES (?, ?, ?, ?, ?)");
             insertStmt.setString(1, nama);
             insertStmt.setString(2, noTelpon);
             insertStmt.setString(3, email);

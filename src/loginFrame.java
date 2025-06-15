@@ -341,7 +341,7 @@ public class loginFrame extends javax.swing.JFrame {
             Connection conn = koneksi.getKoneksi();
             
             // Query untuk cek login
-            String sql = "SELECT * FROM user.admin WHERE username=? AND password=?";
+            String sql = "SELECT * FROM data.admin WHERE username=? AND password=?";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, password);

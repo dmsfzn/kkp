@@ -361,7 +361,7 @@ public class loginKonsumen extends javax.swing.JFrame {
         String username = txtUname.getText();
         String password = new String(txtPwd.getPassword());
 
-        String query = "SELECT * FROM user.konsumen WHERE username = ? AND password = ?";
+        String query = "SELECT * FROM data.konsumen WHERE username = ? AND password = ?";
         try (Connection conn = koneksi.getKoneksi();
             PreparedStatement stmt = conn.prepareStatement(query)) {
 

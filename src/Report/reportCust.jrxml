@@ -33,7 +33,7 @@ FROM
 JOIN
     data.transaksi_penjualan t ON dp.ID_Transaksi = t.ID_Transaksi
 JOIN
-    user.konsumen p ON t.ID_Pelanggan = p.id
+    data.konsumen p ON t.ID_Pelanggan = p.id
 JOIN
     data.barang b ON dp.ID_Barang = b.ID_Barang
 WHERE
