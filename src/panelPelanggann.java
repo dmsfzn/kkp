@@ -3,16 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.io.InputStream;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.table.DefaultTableModel;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author asus
  */
 public class panelPelanggann extends javax.swing.JPanel {
     private ArrayList<Barang> keranjangBelanja;
+    private long idTransaksiTerakhir = 0;
     /**
      * Creates new form panelPelanggan
      */
@@ -21,6 +31,12 @@ public class panelPelanggann extends javax.swing.JPanel {
         keranjangBelanja = new ArrayList<>();
         greetings.setText("Hello, " + session.getUsername());
         showData();
+        
+        // Non-aktifkan tombol cetak saat form pertama kali dibuka
+        btnKwitansi.setEnabled(false); 
+        
+        // Hubungkan event klik untuk tombol cetak
+        btnKwitansi.addActionListener(this::btnKwitansiActionPerformed);
     }
     
      private void showData() {
@@ -47,6 +63,39 @@ public class panelPelanggann extends javax.swing.JPanel {
         }
     }
     
+private void cetakKwitansiJasper(long idTransaksi) {
+    try (Connection conn = koneksi.getKoneksi()) {
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("P_ID_TRANSAKSI", idTransaksi);
+
+        // 1. Ubah ekstensi file dari .jrxml menjadi .jasper
+        InputStream reportStream = getClass().getResourceAsStream("/Report/kwitansi.jasper");
+        
+        if (reportStream == null) {
+            JOptionPane.showMessageDialog(this, 
+                "File laporan (kwitansi.jasper) tidak ditemukan!\nPastikan Anda sudah meng-kompilasi .jrxml dan meletakkan file .jasper di package 'Report'.", 
+                "Error Laporan", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 2. Gunakan JRLoader untuk memuat file yang sudah dikompilasi.
+        // Tidak ada lagi proses kompilasi di sini.
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(reportStream);
+
+        // Kode di bawah ini tetap sama persis
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+        JasperViewer.viewReport(jasperPrint, false);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, 
+            "Gagal mencetak kwitansi.\nError: " + e.getMessage(), 
+            "Error Cetak", 
+            JOptionPane.ERROR_MESSAGE);
+    }
+}
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,8 +111,12 @@ public class panelPelanggann extends javax.swing.JPanel {
         btnKeranjang = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
         greetings = new javax.swing.JLabel();
+        btnKwitansi = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
 
         setOpaque(false);
+
+        jScrollPane1.setOpaque(false);
 
         tblBarang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,6 +145,7 @@ public class panelPelanggann extends javax.swing.JPanel {
             }
         });
         tblBarang.setColumnSelectionAllowed(true);
+        tblBarang.setOpaque(false);
         jScrollPane1.setViewportView(tblBarang);
         tblBarang.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (tblBarang.getColumnModel().getColumnCount() > 0) {
@@ -112,7 +166,7 @@ public class panelPelanggann extends javax.swing.JPanel {
             }
         });
 
-        btnSimpan.setText("Simpan");
+        btnSimpan.setText("Selesai Belanja");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
@@ -121,6 +175,20 @@ public class panelPelanggann extends javax.swing.JPanel {
 
         greetings.setText("jLabel1");
 
+        btnKwitansi.setText("Kuitansi");
+        btnKwitansi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKwitansiActionPerformed(evt);
+            }
+        });
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,14 +196,21 @@ public class panelPelanggann extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 753, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnSimpan)
-                .addGap(18, 18, 18)
-                .addComponent(btnTambah)
-                .addGap(18, 18, 18)
-                .addComponent(btnKeranjang)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnTambah)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnKeranjang)
+                        .addGap(50, 50, 50)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnKwitansi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSimpan)
+                .addGap(28, 28, 28)
                 .addComponent(greetings)
-                .addGap(95, 95, 95))
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,12 +218,16 @@ public class panelPelanggann extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnTambah)
+                        .addComponent(btnSimpan)
                         .addComponent(btnKeranjang)
-                        .addComponent(btnSimpan))
+                        .addComponent(btnHapus))
                     .addComponent(greetings))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTambah)
+                    .addComponent(btnKwitansi))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -242,109 +321,152 @@ public class panelPelanggann extends javax.swing.JPanel {
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         if (keranjangBelanja.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Keranjang belanja kosong. Silakan tambahkan barang terlebih dahulu.");
-        return;
-    }
-
-    Connection conn = null;
-    PreparedStatement pstmtHeader = null;
-    PreparedStatement pstmtDetail = null;
-    ResultSet generatedKeys = null;
-    long idTransaksiBaru = -1; // Variabel untuk menyimpan ID Transaksi yang baru
-
-    // Siapkan query SQL
-    String sqlHeader = "INSERT INTO data.transaksi_penjualan (ID_Pelanggan, Total_Transaksi, tanggal_transaksi) VALUES (?, ?, NOW())";
-    String sqlDetail = "INSERT INTO data.detail_penjualan (ID_Transaksi, ID_Barang, Jumlah, Harga_Saat_Transaksi) VALUES (?, ?, ?, ?)";
-
-    try {
-        // Dapatkan koneksi dan mulai transaksi secara manual
-        conn = koneksi.getKoneksi();
-        conn.setAutoCommit(false); // SANGAT PENTING: Memulai mode transaksi
-
-        // --- LANGKAH 1: SIMPAN HEADER TRANSAKSI ---
-        
-        // Hitung total belanja dari semua item di keranjang
-        int totalBelanja = 0;
-        for (Barang item : keranjangBelanja) {
-            totalBelanja += item.getSubtotal();
+            JOptionPane.showMessageDialog(this, "Keranjang belanja kosong. Silakan tambahkan barang terlebih dahulu.");
+            return;
         }
 
-        // Siapkan dan eksekusi statement untuk header
-        pstmtHeader = conn.prepareStatement(sqlHeader, Statement.RETURN_GENERATED_KEYS);
-        pstmtHeader.setInt(1, session.getIdPelanggan()); // Ambil ID pengguna dari session
-        pstmtHeader.setInt(2, totalBelanja);
-        
-        int headerRowsAffected = pstmtHeader.executeUpdate();
-        if (headerRowsAffected == 0) {
-            throw new SQLException("Gagal menyimpan header transaksi, tidak ada baris yang ditambahkan.");
-        }
+        // Variabel untuk menampung ID yang akan dicetak nanti
+        long idUntukDicetak = 0; 
 
-        // Ambil ID_Transaksi yang baru saja dibuat oleh database
-        generatedKeys = pstmtHeader.getGeneratedKeys();
-        if (generatedKeys.next()) {
-            idTransaksiBaru = generatedKeys.getLong(1);
-        } else {
-            throw new SQLException("Gagal mendapatkan ID untuk transaksi baru.");
-        }
+        // --- BLOK UNTUK MENYIMPAN TRANSAKSI ---
+        Connection conn = null;
+        PreparedStatement pstmtHeader = null;
+        PreparedStatement pstmtDetail = null;
+        ResultSet generatedKeys = null;
 
-        // --- LANGKAH 2: SIMPAN DETAIL TRANSAKSI (SEMUA BARANG DI KERANJANG) ---
-        
-        // Siapkan statement untuk detail
-        pstmtDetail = conn.prepareStatement(sqlDetail);
+        String sqlHeader = "INSERT INTO data.transaksi_penjualan (ID_Pelanggan, Total_Transaksi, tanggal_transaksi) VALUES (?, ?, NOW())";
+        String sqlDetail = "INSERT INTO data.detail_penjualan (ID_Transaksi, ID_Barang, Jumlah, Harga_Saat_Transaksi) VALUES (?, ?, ?, ?)";
 
-        // Loop melalui keranjang dan tambahkan setiap item ke dalam "batch"
-        for (Barang item : keranjangBelanja) {
-            pstmtDetail.setLong(1, idTransaksiBaru); // Gunakan ID Transaksi yang sama untuk semua item
-            pstmtDetail.setString(2, item.getIdBarang());
-            pstmtDetail.setInt(3, item.getKuantitas());
-            pstmtDetail.setInt(4, item.getHarga());
-            pstmtDetail.addBatch(); // Tambahkan query ini ke dalam antrian batch
-        }
-
-        // Eksekusi semua query dalam batch sekaligus
-        pstmtDetail.executeBatch();
-
-        // --- LANGKAH 3: SELESAIKAN TRANSAKSI ---
-        
-        // Jika semua query berhasil, simpan semua perubahan ke database secara permanen
-        conn.commit(); 
-        
-        JOptionPane.showMessageDialog(this, "Pesanan berhasil disimpan dengan ID Transaksi: " + idTransaksiBaru);
-        
-        // Kosongkan keranjang di aplikasi dan refresh tabel
-        keranjangBelanja.clear();
-        //refreshTabelKeranjang(); // Panggil method untuk update JTable keranjang
-
-    } catch (SQLException e) {
-        // Jika terjadi error di mana pun di dalam blok 'try', batalkan semua perubahan
         try {
-            if (conn != null) {
-                conn.rollback(); // Batalkan semua query yang sudah dijalankan
-                JOptionPane.showMessageDialog(this, "Terjadi kesalahan database. Transaksi dibatalkan.\nError: " + e.getMessage());
+            conn = koneksi.getKoneksi();
+            conn.setAutoCommit(false);
+
+            int totalBelanja = 0;
+            for (Barang item : keranjangBelanja) {
+                totalBelanja += item.getSubtotal();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        e.printStackTrace();
-    } finally {
-        // Blok 'finally' untuk memastikan semua koneksi ditutup, baik berhasil maupun gagal
-        try {
-            if (generatedKeys != null) generatedKeys.close();
-            if (pstmtHeader != null) pstmtHeader.close();
-            if (pstmtDetail != null) pstmtDetail.close();
-            if (conn != null) {
-                conn.setAutoCommit(true); // Kembalikan koneksi ke mode default
-                conn.close();
+
+            pstmtHeader = conn.prepareStatement(sqlHeader, Statement.RETURN_GENERATED_KEYS);
+            pstmtHeader.setInt(1, session.getIdPelanggan());
+            pstmtHeader.setInt(2, totalBelanja);
+            pstmtHeader.executeUpdate();
+
+            generatedKeys = pstmtHeader.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                long idTransaksiBaru = generatedKeys.getLong(1);
+            
+                // Simpan ID ke variabel sementara, JANGAN panggil cetak di sini
+                idUntukDicetak = idTransaksiBaru; 
+                System.out.println(idTransaksiBaru);
+                // Simpan juga ke variabel kelas untuk tombol "Cetak Ulang"
+                this.idTransaksiTerakhir = idTransaksiBaru;
+            } else {
+                throw new SQLException("Gagal mendapatkan ID untuk transaksi baru.");
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            pstmtDetail = conn.prepareStatement(sqlDetail);
+            for (Barang item : keranjangBelanja) {
+                pstmtDetail.setLong(1, idUntukDicetak);
+                pstmtDetail.setString(2, item.getIdBarang());
+                pstmtDetail.setInt(3, item.getKuantitas());
+                pstmtDetail.setInt(4, item.getHarga());
+                pstmtDetail.addBatch();
+            }
+            pstmtDetail.executeBatch();
+
+            // Selesaikan transaksi
+            conn.commit(); 
+        
+            JOptionPane.showMessageDialog(this, "Pesanan berhasil disimpan dengan ID Transaksi: " + idUntukDicetak);
+        
+            // Aktifkan tombol cetak
+            btnKwitansi.setEnabled(true);
+        
+            keranjangBelanja.clear();
+            // refreshTabelKeranjang(); // Jika ada
+
+        } catch (SQLException e) {
+            try {
+                if (conn != null) conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan database. Transaksi dibatalkan.\nError: " + e.getMessage());
+        } finally {
+            // Pastikan semua resource ditutup
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+                if (pstmtHeader != null) pstmtHeader.close();
+                if (pstmtDetail != null) pstmtDetail.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
-    }
+
+        // --- AKHIR DARI BLOK PENYIMPANAN ---
+        // --- PROSES BARU UNTUK MENCETAK KWITANSI ---
+        // Cek apakah ada ID yang valid untuk dicetak
+        if (idUntukDicetak > 0) {
+            // Panggil metode cetak DI LUAR blok try-catch-finally sebelumnya
+            cetakKwitansiJasper(idUntukDicetak);
+        }
     }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+          ArrayList<String> namaBarangDihapus = new ArrayList<>();
+          StringBuilder pesanKonfirmasi = new StringBuilder("Barang berikut telah dihapus dari keranjang:\n");
+
+          // Loop melalui setiap baris di tabel untuk menemukan yang dicentang
+          for (int i = 0; i < tblBarang.getRowCount(); i++) {
+              Boolean isChecked = (Boolean) tblBarang.getValueAt(i, 0);
+              // Jika checkbox dicentang
+              if (isChecked != null && isChecked) {
+                  // Ambil nama barang dari baris yang dicentang
+                  String namaBarang = (String) tblBarang.getValueAt(i, 2);
+                  namaBarangDihapus.add(namaBarang);
+                  pesanKonfirmasi.append("- ").append(namaBarang).append("\n");
+              }
+          }
+
+          // Jika tidak ada barang yang dipilih, tampilkan peringatan
+          if (namaBarangDihapus.isEmpty()) {
+              JOptionPane.showMessageDialog(this, "Tidak ada barang yang dipilih untuk dihapus.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+              return; // Keluar dari metode karena tidak ada yang perlu dilakukan
+          }
+
+          // Hapus item dari keranjangBelanja yang namanya cocok dengan yang ada di daftar 'namaBarangDihapus'
+          // Menggunakan lambda expression (removeIf) adalah cara yang modern dan efisien
+         keranjangBelanja.removeIf(item -> namaBarangDihapus.contains(item.getNama()));
+
+          // Setelah menghapus, hilangkan semua centang di tabel
+         for (int i = 0; i < tblBarang.getRowCount(); i++) {
+             tblBarang.setValueAt(false, i, 0);
+         }
+    
+            // Tampilkan pesan konfirmasi kepada pengguna
+         JOptionPane.showMessageDialog(this, pesanKonfirmasi.toString(), "Sukses", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnKwitansiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKwitansiActionPerformed
+        if (this.idTransaksiTerakhir == 0) {
+        JOptionPane.showMessageDialog(this, 
+            "Belum ada transaksi yang selesai untuk dicetak ulang.", 
+            "Informasi", 
+            JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // Langsung gunakan ID yang sudah tersimpan untuk mencetak kembali
+        cetakKwitansiJasper(this.idTransaksiTerakhir);
+    }//GEN-LAST:event_btnKwitansiActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnKeranjang;
+    private javax.swing.JButton btnKwitansi;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnTambah;
     private javax.swing.JLabel greetings;
